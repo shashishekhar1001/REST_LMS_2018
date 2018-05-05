@@ -1,0 +1,55 @@
+{% load i18n %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Inline</title>
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">    
+</head>
+<body>
+    <h1>{{ course }}</h1>
+    <div class="container">
+        {% for message in messages %} {{ message }} {% endfor %}
+        <h1>Modules</h1>
+        
+        <form id="my-form" action="" method="POST">{% csrf_token %}
+            {{ formset.management_form }}
+            
+                {% for form in formset %}
+                <div class="module-formset">
+                    {{ form | crispy }}
+                </div>                
+                {% endfor %}
+
+            <input type="submit" value="Save" class="btn btn-success">
+        </form>
+    </div>
+    <br/> 
+        <script type="text/javascript" src="{% static 'js/jquery.min.js' %}"></script>  
+        <!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script> -->
+        <script src="{% static 'js/jquery.formset.js' %}"></script>
+        <script>
+            $('.module-formset').formset({
+                addText: 'add',
+                deleteText: 'remove',
+                prefix: 'dim'
+            });
+        </script> 
+        <script>
+            $( document ).ready(function() {
+                console.log( "document loaded" );
+                $(".delete-row").click(function() {
+                    console.log("Deleted");
+                    var id = $(this).parent().attr('id');
+                    console.log(id);
+                    var cls = $(this).parent().attr('class');
+                    console.log(cls);
+                });
+            });
+        </script>
+</body>
+</html>

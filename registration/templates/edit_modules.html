@@ -1,0 +1,322 @@
+{% load i18n %}
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Edit Course Modules</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="{% static 'js/angular.min.js' %}"></script>    
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+    <script src="{% static 'js/sortable.js' %}"></script>            
+</head>
+<body>
+     <div class="container" ng-app="edit_modules" ng-controller="myCtrl">   
+        <div style="text-align:center;">
+            <h1>Edit Modules</h1>
+            <!-- <h3>{{ course }}</h3> -->
+            <h3 id="course_id" ng-hide="true">{{ course.id }}</h3>
+            <h3 id="csrf" ng-hide="true">{{ csrf_token }}</h3>
+            <br>
+            <hr>
+        </div>
+        <div>
+            {% verbatim %}
+                <div id="list" ui-sortable="sortableOptions" ng-model="modules">
+                    <div ng-repeat="each in modules  | orderBy : 'order'">
+                    <!-- <div ng-repeat="each in modules  | orderBy : 'order'"> -->
+                        <div class="row">
+                            <div class="col-sm-1">
+                                <h3> {{ each.order }} </h3>
+                            </div>
+                            <div class="col-sm-6">
+                                <h3> {{ each.name }} </h3>
+                            </div>
+                            <div class="col-sm-1">
+                                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#viewModal" ng-click="view_module(each, $index)">
+                                    VIEW
+                                </button>
+                            </div>
+                            <div class="col-sm-1">
+                                <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#editModal" ng-click="edit_module(each, $index)">
+                                    EDIT
+                                </button>
+                            </div>
+                            <div class="col-sm-2">
+                                <button class="btn btn-danger delete" ng-click="delete_module(each, $index)">DELETE</button>                    
+                            </div>
+                            <div class="col-sm-1" data-toggle="modal" data-target="#quizModal" ng-click="quiz(each)">
+                                <button class="btn btn-info">QUIZ</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+
+                <button class="btn btn-primary"  data-toggle="modal" data-target="#addModal" ng-click="empty_form()">
+                    Add New Module
+                </button>
+
+                <hr>
+
+                <!-- QUIZ MODAL -->
+                <div id="quizModal" class="modal fade" role="dialog">
+                    <div class="modal-dialog">
+                    
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <!-- <h4 class="modal-title">{{ quiz_name }}</h4> -->
+                                <form class="form-inline">
+                                    <div class="row">
+                                        <div class="form-group">
+                                            <label for="q_name">&nbsp;&nbsp;&nbsp;&nbsp;Quiz Name:</label>
+                                            <input type="text" ng-model="quiz_name" class="form-control" id="q_name">                                        
+                                        </div>
+                                        <button type="submit" class="btn btn-primary" ng-click="change_quiz_name()">Submit</button>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-body">
+                                <p>Some text in the modal.</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    
+                    </div>
+                </div>
+                
+                <!-- END QUIZ MODAL -->
+
+                <!-- ADD Modal -->
+                <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Add Module:-</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form class="form-horizontal" id="add_form">
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-2" for="name">Module Name:</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control" id="name" placeholder="Module Name" name="module_name" ng-model="new_module_name" ng-required="true">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-2" for="new_ass">Assignment:</label>
+                                            <div class="col-sm-10">          
+                                                <input type="file" class="form-control" id="new_ass" placeholder="Assignment" name="Assignment">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-2" for="new_pres">Presentation:</label>
+                                            <div class="col-sm-10">          
+                                                <input type="file" class="form-control" id="new_pres" placeholder="Presentation" name="Presentation">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-2" for="new_vdo">Video:</label>
+                                            <div class="col-sm-10">          
+                                                <input type="file" class="form-control" id="new_vdo" placeholder="Video" name="Video">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-sm-2" for="Topics">Topics:</label>
+                                            <div class="col-sm-10">          
+                                                <input type="input" class="form-control" id="Topics" placeholder="Topics" name="Topics" ng-model="new_module_topics">
+                                            </div>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary" ng-click="add_module()" ng-disabled="show_add_progrsess_bar">Create Module</button>                                        
+                                        <button type="button" class="btn btn-danger" ng-click="add_cancel()" ng-show="show_add_progrsess_bar">Abort</button>                                        
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <div class="progress" ng-show="show_add_progrsess_bar">
+                                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="{{addmodule_progressBar}}" aria-valuemin="0" aria-valuemax="100" style="width: {{addmodule_progressBar}}%">
+                                            {{addmodule_progressBar}}%
+                                        </div>
+                                    </div>
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End ADD Modal -->
+    
+
+                <!-- View Modal -->
+                <div class="modal fade" id="viewModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Module Details:-</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form class="form-horizontal">
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-2" for="name">Module Name:</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control" id="name" placeholder="Module Name" name="module_name" value="{{ selected.name }}" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-2" for="Assignment">Assignment:</label>
+                                        <div class="col-sm-8">          
+                                            <input type="input" class="form-control" id="Assignment" placeholder="Assignment" name="Assignment" value="{{ selected.assignment_name }}" disabled>
+                                        </div>
+                                        <div class="col-sm-2">          
+                                            <a ng-href="{{ selected.Assignment }}" target="_blank">Preview</a>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-2" for="Presentation">Presentation:</label>
+                                        <div class="col-sm-8">          
+                                            <input type="input" class="form-control" id="Presentation" placeholder="Presentation" name="Presentation" value="{{ selected.presentation_name }}" disabled>
+                                        </div>
+                                        <div class="col-sm-2">          
+                                            <a ng-href="{{ selected.Presentation }}" target="_blank">Preview</a>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-2" for="Video">Video:</label>
+                                        <div class="col-sm-8">          
+                                            <input type="input" class="form-control" id="Video" placeholder="Video" name="Video" value="{{ selected.video_name }}" disabled>
+                                        </div>
+                                        <div class="col-sm-2">          
+                                            <a ng-href="{{ selected.video }}" target="_blank">Preview</a>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-2" for="Topics">Topics:</label>
+                                        <div class="col-sm-10">          
+                                            <input type="input" class="form-control" id="Topics" placeholder="Topics" name="Topics" value="{{ selected.topics }}" disabled>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- End View Modal -->
+                
+                <!-- Edit Modal -->
+                <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel"> Edit Module </h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form class="form-horizontal" enctype="multipart/form-data">
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-2" for="name">Module Name:</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" id="name" placeholder="Module Name" name="module_name" value="{{ selected.name }}" ng-model="form_info.name">
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <button type="submit" class="btn btn-info" ng-click="change_module_name()">Update</button>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-2" for="Assignment">Assignment:</label>
+                                        <div class="col-sm-8">          
+                                            <input type="file" class="form-control" id="ass" placeholder="Assignment" name="Assignment" value="{{ selected.assignment_name }}">
+                                            <label for="ass">Current File:- <a ng-href="{{ selected.Assignment }}" target="_blank">{{ selected.assignment_name }}</a></label>                                       
+                                            <div class="progress" ng-show="show_ass_progrsess_bar">
+                                                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="{{assprogressBar}}" aria-valuemin="0" aria-valuemax="100" style="width: {{assprogressBar}}%">
+                                                    {{assprogressBar}}%
+                                                </div>
+                                            </div>     
+                                        </div>
+                                        <div class="col-sm-2">          
+                                            <button class="btn btn-info" ng-click="assignment_upload()">Upload</button>     
+                                            <div>
+                                                <br>
+                                            </div>
+                                            <button class="btn btn-danger" ng-click="ass_cancel()"  ng-show="show_ass_progrsess_bar">Abort</button>    
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-2" for="Presentation">Presentation:</label>
+                                        <div class="col-sm-8">          
+                                            <input type="file" class="form-control" id="pres" placeholder="Presentation" name="Presentation" value="{{ selected.presentation_name }}">
+                                            <label for="pres">Current File:- <a ng-href="{{ selected.Presentation }}" target="_blank">{{ selected.presentation_name }}</a></label>
+                                            <div class="progress" ng-show="show_pres_progrsess_bar">
+                                                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="{{presprogressBar}}" aria-valuemin="0" aria-valuemax="100" style="width: {{presprogressBar}}%">
+                                                    {{presprogressBar}}%
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-2">          
+                                            <button class="btn btn-info" ng-click="presentation_upload()">Upload</button>     
+                                            <div>
+                                                <br>
+                                            </div>
+                                            <button class="btn btn-danger" ng-click="pres_cancel()"  ng-show="show_pres_progrsess_bar">Abort</button>         
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-2" for="Video">Video:</label>
+                                        <div class="col-sm-8">          
+                                            <input type="file" class="form-control" id="vdo" placeholder="Video" name="Video" value="{{ selected.video_name }}">
+                                            <label for="vdo">Current File:- <a ng-href="{{ selected.video }}" target="_blank">{{ selected.video_name }}</a></label>
+                                            <div class="progress" ng-show="show_vdo_progrsess_bar">
+                                                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="{{vdoprogressBar}}" aria-valuemin="0" aria-valuemax="100" style="width: {{vdoprogressBar}}%">
+                                                    {{vdoprogressBar}}%
+                                                </div>
+                                            </div>                                            
+                                        </div>
+                                        <div class="col-sm-2"> 
+                                            <button class="btn btn-info" ng-click="vdo_upload()">Upload</button>
+                                            <div>
+                                                <br>
+                                            </div>
+                                            <button class="btn btn-danger" ng-click="vdo_cancel()"  ng-show="show_vdo_progrsess_bar">Abort</button>         
+                                        </div>   
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-2" for="Topics">Topics:</label>
+                                        <div class="col-sm-8">          
+                                            <input type="input" class="form-control" id="Topics" placeholder="Topics" name="Topics" ng-model="form_info.topics">
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <button type="submit" class="btn btn-info" ng-click="change_topic()">Update</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- End Edit Modal -->
+            {% endverbatim %}
+            <br>            
+        </div>        
+    </div>
+    <script src="{% static 'js/edit_modules.js' %}"></script>    
+</body>
+</html>

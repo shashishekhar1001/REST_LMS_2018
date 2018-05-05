@@ -1,0 +1,25 @@
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Login</title>
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">    
+</head>
+<body>
+    <br/>
+    <br/>
+    <div class="container">
+        {% for course in trainer_courses %} 
+            {{ course }}
+            <a href="{% url 'edit_course_modules' course.id %}"><button>Edit Course Modules</button></a> 
+            <a href="{% url 'edit_course_details' course.id %}"><button>Edit Course Details</button></a> 
+            <br/>
+        {% endfor %}
+    </div>
+    <br/>    
+</body>
+</html>

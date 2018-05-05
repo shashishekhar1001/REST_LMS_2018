@@ -1,0 +1,50 @@
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>List Blogs</title>
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">    
+</head>
+<body>
+    <br/>
+    {% for message in messages %} {{ message }} {% endfor %}
+    <br/>
+    <div class="container">
+        {% for blog in blogs %} 
+            <a href='{{ blog.get_absolute_url }}'>{{ blog.title }}</a><br/> 
+            {{ blog.content }} <br/>
+            {{ blog.created }} <br/>
+            {{ blog.updated }} <br/>
+            {{ blog.image }} <br/>
+            <hr/>
+        {% endfor %}
+    </div>
+    
+    <br/>
+    {% if blogs.has_other_pages %}
+        <ul class="pagination">
+            {% if blogs.has_previous %}
+            <li><a href="?page={{ blogs.previous_page_number }}">&laquo;</a></li>
+            {% else %}
+            <li class="disabled"><span>&laquo;</span></li>
+            {% endif %}
+            {% for i in blogs.paginator.page_range %}
+            {% if blogs.number == i %}
+                <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+            {% else %}
+                <li><a href="?page={{ i }}">{{ i }}</a></li>
+            {% endif %}
+            {% endfor %}
+            {% if blogs.has_next %}
+            <li><a href="?page={{ blogs.next_page_number }}">&raquo;</a></li>
+            {% else %}
+            <li class="disabled"><span>&raquo;</span></li>
+            {% endif %}
+        </ul>
+    {% endif %}
+</body>
+</html>

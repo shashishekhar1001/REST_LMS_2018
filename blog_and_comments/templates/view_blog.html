@@ -1,0 +1,92 @@
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>View Blog Detail</title>
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            function updateText(btn, newCount, verb)
+            {
+                btn.text(newCount + " " + verb);
+            }
+            $(".like-btn").click(function(e){
+                e.preventDefault()
+                console.log("CLICK");
+                var this_ = $(this)
+                var like_url = this_.attr("data-href")
+                var like_count = parseInt(this_.attr("data-likes")) 
+                $.ajax({
+                    url: like_url,
+                    method: "GET",
+                    data: {},
+                    success: function(data){
+                        console.log(data);
+                        var newLikes;
+                        if (data.liked){
+                            //add one like
+                            like_count = like_count + 1;
+                            $(".like-btn").attr("data-likes", like_count);
+                            updateText(this_, like_count, "");        
+                            alert("This blog is liked by you.")                                                                   
+                        }
+                        else{
+                            //remove one like
+                            like_count = like_count - 1;         
+                            $(".like-btn").attr("data-likes", like_count);
+                            updateText(this_, like_count, "");
+                            alert("This blog is unliked by you.")                                                                                                                                              
+                        }
+                    },
+                    error: function(error){
+                        console.log(error);
+                        console.log("error");
+                    }
+                })
+            });
+        });
+    </script>    
+</head>
+<body>
+
+<!-- Facebook Comments Part -->
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = 'https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.12';
+    fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+<!-- End Facebook Comments Part -->
+    
+    <br/>
+    <br/>
+    <div class="container">
+            {{ blog.title }}<br/> 
+            {{ blog.content }} <br/>
+            {{ blog.created }} <br/>
+            {{ blog.updated }} <br/>
+            {{ blog.image }} <br/>
+            <hr/>
+            Current URL:- {{ request.build_absolute_uri }}
+            <hr/>
+                <div>{{ blog.likes.count }}</div>
+            <hr/>
+                <a href="{{ blog.get_like_url }}">Normal LIKE</a>
+            <hr/>
+                AJAX LIKE:-
+                <a class="like-btn" data-href="{{ blog.get_api_like_url }}" data-likes="{{ blog.likes.count }}" href=""> {{ blog.likes.count }} </a>
+            <hr/>
+    </div>
+    <!-- <div class="fb-like" data-href="{{ request.build_absolute_uri }}" data-layout="standard" data-action="like" data-size="small" data-show-faces="true"></div>
+    <div class="fb-share-button" data-href="{{ request.build_absolute_uri }}" data-layout="button_count" data-size="small" data-mobile-iframe="true"><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fdevelopers.facebook.com%2Fdocs%2Fplugins%2F&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">Share</a></div> -->
+    <div class="fb-comments" data-href="{{ request.build_absolute_uri }}" data-numposts="5"></div>
+    <br/>    
+</body>
+</html>
