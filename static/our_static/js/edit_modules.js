@@ -10,6 +10,9 @@ app.config(function($httpProvider) {
 });
 
 app.controller('myCtrl', function($scope, $http, $q) {
+	$("#select_option").togglebutton();
+
+
 	$scope.form_info = {};
 	
 	var course_id = document.getElementById("course_id").innerHTML;
@@ -22,7 +25,6 @@ app.controller('myCtrl', function($scope, $http, $q) {
 	function successCallback(response){
 		$scope.course = response.data;
 		$scope.modules = $scope.course.modules;
-		console.log($scope.course.modules[0]);
 		$scope.sortableOptions = {
 			stop: function(e, ui) {
 				$scope.update_order(); 
@@ -467,13 +469,20 @@ app.controller('myCtrl', function($scope, $http, $q) {
 
 	// QUIZ PART
 	$scope.quiz = function(object){
-		console.log(object.quiz[0]);
 
 		// Check if quiz is present already
 		if (object.quiz[0] !== undefined){
 			console.log("Quiz Present");
 			$scope.quiz_name = object.quiz[0].quiz_name;
-			$scope.quiz_present = true;			
+			$scope.quiz_present = true;		
+			$scope.questions = object.quiz[0].questions;
+			if ($scope.questions.length !== 0){
+				$scope.selected_question = $scope.questions[0];
+				console.log($scope.selected_question);
+			}
+			else{
+				console.log("Add new Question!");
+			};
 		}
 		else{
 			console.log("Quiz Not Present");
@@ -511,7 +520,6 @@ app.controller('myCtrl', function($scope, $http, $q) {
 			// IF QUIZ NOT PRESENT
 			if ($scope.quiz_present === false){
 				var url = object.url;
-				console.log(url);
 				var data = {"quiz": [{
 					"quiz_name": $scope.quiz_name,
 					// "questions": [{}]
@@ -520,9 +528,11 @@ app.controller('myCtrl', function($scope, $http, $q) {
 				$http.patch(url, data).then(successCallback, errorCallback);
 				function successCallback(response){
 					if (response.status === 200){
+						$scope.quiz_present = true;
+						object.quiz = response.data.quiz;
 						swal("Good job!", "Quiz Name Updated!", "success");
 					}
-					console.log(response);
+					// console.log(response);
 				};
 				function errorCallback(error){
 					console.log(error);
@@ -532,6 +542,19 @@ app.controller('myCtrl', function($scope, $http, $q) {
 			// END IF QUIZ NOT PRESENT
 		};
 	};
+
+
+	$scope.save_question = function(){
+		console.log("Choose new or old");
+	}
+
+	$scope.save_new_question = function(){
+		console.log("Save New Question");
+	}
+
+	$scope.save_old_question = function(){
+		console.log("Save Old Question");
+	}
 
 	// END QUIZ PART
 });

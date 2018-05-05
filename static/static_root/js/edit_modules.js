@@ -462,4 +462,83 @@ app.controller('myCtrl', function($scope, $http, $q) {
 			$scope.show_add_progrsess_bar = false;			
 		};
 	};
+
+
+	// QUIZ PART
+	$scope.quiz = function(object){
+
+		// Check if quiz is present already
+		if (object.quiz[0] !== undefined){
+			console.log("Quiz Present");
+			$scope.quiz_name = object.quiz[0].quiz_name;
+			$scope.quiz_present = true;		
+			$scope.questions = object.quiz[0].questions;
+			if ($scope.questions.length !== 0){
+				$scope.selected_question = $scope.questions[0];
+				console.log($scope.selected_question);
+			}
+			else{
+				console.log("Add new Question!");
+			};
+		}
+		else{
+			console.log("Quiz Not Present");
+			$scope.quiz_name = "";
+			$scope.quiz_present = false;						
+		};
+
+		// Change the name of quiz if present or create new if not present
+		$scope.change_quiz_name = function(){
+			console.log("Change Quiz Name");
+			console.log($scope.quiz_name);
+			// IF QUIZ PRESENT
+			if ($scope.quiz_present === true){
+				$scope.quiz_url = object.quiz[0].url;
+				console.log($scope.quiz_url);
+				var url = $scope.quiz_url;
+				console.log(url);
+				var data = {
+					"quiz_name": $scope.quiz_name
+				}; 
+				console.log(data);
+				$http.patch(url, data).then(successCallback, errorCallback);
+				function successCallback(response){
+					if (response.status === 200){
+						swal("Good job!", "Quiz Name Updated!", "success");
+					}
+				};
+				function errorCallback(error){
+					console.log(error);
+					swal("Oops!", "Something went wrong!", "error");					
+				};			
+			};
+			// END IF QUIZ PRESENT
+
+			// IF QUIZ NOT PRESENT
+			if ($scope.quiz_present === false){
+				var url = object.url;
+				var data = {"quiz": [{
+					"quiz_name": $scope.quiz_name,
+					// "questions": [{}]
+				}]}; 
+				console.log(data);
+				$http.patch(url, data).then(successCallback, errorCallback);
+				function successCallback(response){
+					if (response.status === 200){
+						$scope.quiz_present = true;
+						object.quiz = response.data.quiz;
+						swal("Good job!", "Quiz Name Updated!", "success");
+					}
+					// console.log(response);
+				};
+				function errorCallback(error){
+					console.log(error);
+					swal("Oops!", "Something went wrong!", "error");					
+				};			
+			};
+			// END IF QUIZ NOT PRESENT
+		};
+	};
+
+	// END QUIZ PART
 });
