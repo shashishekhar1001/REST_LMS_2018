@@ -73,12 +73,29 @@ class Course_ModuleSerializer(serializers.HyperlinkedModelSerializer):
             Quiz.objects.create(module_referred = module, **qd)
         return module
 
-    # def update(self, instance, validated_data):
-    #     instance.name = validated_data.get('name', instance.name)
-    #     quiz_data = validated_data.get('quiz')
-    #     print quiz_data
-    #     # Somehow save instance with quiz_data
-    #     return instance 
+    def update(self, instance, validated_data):
+        instance.name = validated_data.get('name', instance.name)
+        instance.part_of = validated_data.get('part_of', instance.part_of)
+        instance.video = validated_data.get('video', instance.video)
+        instance.Presentation = validated_data.get('Presentation', instance.Presentation)
+        instance.Assignment = validated_data.get('Assignment', instance.Assignment)
+        instance.topics = validated_data.get('topics', instance.topics)
+        instance.order = validated_data.get('order', instance.order)
+        try:
+            quiz_data = validated_data.get('quiz')
+        except:
+            pass
+        if quiz_data:
+            instance.quiz.clear()
+            Quiz.objects.bulk_create(
+               [
+                 Quiz(module_referred=instance, **quiz)
+                 for quiz in quiz_data
+               ],
+            )
+        print instance.video
+        instance.save()
+        return instance 
 
 
 class CourseSerializer(serializers.HyperlinkedModelSerializer):
