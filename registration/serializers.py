@@ -86,7 +86,7 @@ class Course_ModuleSerializer(serializers.HyperlinkedModelSerializer):
         except:
             pass
         if quiz_data:
-            instance.quiz.clear()
+            # instance.quiz.clear()
             Quiz.objects.bulk_create(
                [
                  Quiz(module_referred=instance, **quiz)

@@ -514,8 +514,7 @@ app.controller('myCtrl', function($scope, $http, $q) {
 				console.log(url);
 				var data = {"quiz": [{
 					"quiz_name": $scope.quiz_name,
-					"module_referred": url,
-					"questions": [{}]
+					// "questions": [{}]
 				}]}; 
 				console.log(data);
 				$http.patch(url, data).then(successCallback, errorCallback);
