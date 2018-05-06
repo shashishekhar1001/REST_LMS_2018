@@ -12,8 +12,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="{% static 'js/angular.min.js' %}"></script>    
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-    <script src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
-    <script src="{% static 'js/select-togglebutton.js' %}"></script>        
+    <script src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>      
     <script src="{% static 'js/sortable.js' %}"></script>            
 </head>
 <body>
@@ -97,42 +96,47 @@
                                     <div class="form-group">
                                         <label class="control-label col-sm-2" for="question">Question:</label>
                                         <div class="col-sm-10">
-                                            <input type="text" class="form-control" id="question" placeholder="Enter question" name="question" ng-required="true">
+                                            <input type="text" class="form-control" id="question" placeholder="Enter question" name="question" ng-required="true" ng-model="selected_question.text">
                                         </div>
                                     </div>
-                                    <div class="form-group">        
+                                    <div class="form-group" ng-class="{'has-success has-feedback': selected_question.option_1 === selected_question.correct && selected_question.correct !== undefined}">        
                                         <label class="control-label col-sm-3" for="option1">Option 1:</label>
                                         <div class="col-sm-9">
-                                            <input type="text" class="form-control" id="option1" placeholder="Enter Option" name="option1" ng-required="true">
+                                            <input type="text" class="form-control" id="option1" placeholder="Enter Option" name="option1" ng-required="true" ng-model="selected_question.option_1.text">
+                                            <span class="glyphicon glyphicon-ok form-control-feedback" ng-show="selected_question.option_1 === selected_question.correct && selected_question.correct !== undefined"></span>
                                         </div>
                                     </div>
-                                    <div class="form-group">        
+                                    <div class="form-group" ng-class="{'has-success has-feedback': selected_question.option_2 === selected_question.correct && selected_question.correct !== undefined}">        
                                         <label class="control-label col-sm-3" for="option2">Option 2:</label>
                                         <div class="col-sm-9">
-                                            <input type="text" class="form-control" id="option2" placeholder="Enter Option" name="option2" ng-required="true">
+                                            <input type="text" class="form-control" id="option2" placeholder="Enter Option" name="option2" ng-required="true" ng-model="selected_question.option_2.text">
+                                            <span class="glyphicon glyphicon-ok form-control-feedback" ng-show="selected_question.option_2 === selected_question.correct && selected_question.correct !== undefined"></span>
                                         </div>
                                     </div>
-                                    <div class="form-group">        
+                                    <div class="form-group" ng-class="{'has-success has-feedback': selected_question.option_3 === selected_question.correct && selected_question.correct !== undefined}">        
                                         <label class="control-label col-sm-3" for="option3">Option 3:</label>
                                         <div class="col-sm-9">
-                                            <input type="text" class="form-control" id="option3" placeholder="Enter Option" name="option3" ng-required="true">
+                                            <input type="text" class="form-control" id="option3" placeholder="Enter Option" name="option3" ng-required="true" ng-model="selected_question.option_3.text">
+                                            <span class="glyphicon glyphicon-ok form-control-feedback" ng-show="selected_question.option_3 === selected_question.correct && selected_question.correct !== undefined"></span>                                                                                        
                                         </div>
                                     </div>
-                                    <div class="form-group">        
+                                    <div class="form-group" ng-class="{'has-success has-feedback': selected_question.option_4 === selected_question.correct && selected_question.correct !== undefined}">        
                                         <label class="control-label col-sm-3" for="option4">Option 4:</label>
                                         <div class="col-sm-9">
-                                            <input type="text" class="form-control" id="option4" placeholder="Enter Option" name="option4" ng-required="true">
+                                            <input type="text" class="form-control" id="option4" placeholder="Enter Option" name="option4" ng-required="true" ng-model="selected_question.option_4.text">
+                                            <span class="glyphicon glyphicon-ok form-control-feedback" ng-show="selected_question.option_4 === selected_question.correct && selected_question.correct !== undefined"></span>                                            
                                         </div>
                                     </div>
                                     <div class="form-group">        
-                                        <label class="control-label col-sm-4" for="select_option">Correct Option :</label>
+                                        <label class="control-label col-sm-4" for="select_option">Select Correct Option :</label>
                                         <div class="col-sm-8">
-                                            <select class="form-control" id="select_option" ng-required="true">
-                                                <option>Option 1</option>
-                                                <option>Option 2</option>
-                                                <option>Option 3</option>
-                                                <option>Option 4</option>
-                                            </select>
+                                            <select class="form-control" ng-model="selected_question.correct" ng-options="item.text for item in selected_question.possible_answers"></select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">        
+                                        <label class="control-label col-sm-4" for="select_option">Selected Correct Option :</label>                                                                                                                            
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" placeholder="Correct Option" ng-model="selected_question.correct.text">
                                         </div>
                                     </div>
                                     <div class="form-group">        

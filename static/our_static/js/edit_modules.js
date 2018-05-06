@@ -10,8 +10,6 @@ app.config(function($httpProvider) {
 });
 
 app.controller('myCtrl', function($scope, $http, $q) {
-	$("#select_option").togglebutton();
-
 
 	$scope.form_info = {};
 	
@@ -371,6 +369,7 @@ app.controller('myCtrl', function($scope, $http, $q) {
 
 
 	// Unpopulate form
+	// Empty Form
 	$scope.empty_form = function(){
 		console.log("Empty Form");	
 		$('#add_form')[0].reset();
@@ -469,6 +468,7 @@ app.controller('myCtrl', function($scope, $http, $q) {
 
 	// QUIZ PART
 	$scope.quiz = function(object){
+		// console.log($scope.selected_question.correct);
 
 		// Check if quiz is present already
 		if (object.quiz[0] !== undefined){
@@ -478,10 +478,16 @@ app.controller('myCtrl', function($scope, $http, $q) {
 			$scope.questions = object.quiz[0].questions;
 			if ($scope.questions.length !== 0){
 				$scope.selected_question = $scope.questions[0];
+				$scope.selected_question.correct = $scope.questions[0].correct;
 				console.log($scope.selected_question);
+				$scope.selected_question.option_1 = $scope.selected_question.possible_answers[0];
+				$scope.selected_question.option_2 = $scope.selected_question.possible_answers[1];
+				$scope.selected_question.option_3 = $scope.selected_question.possible_answers[2];
+				$scope.selected_question.option_4 = $scope.selected_question.possible_answers[3];
 			}
 			else{
-				console.log("Add new Question!");
+				console.log("Add first Question!");
+				$scope.selected_question = null;
 			};
 		}
 		else{
@@ -543,18 +549,23 @@ app.controller('myCtrl', function($scope, $http, $q) {
 		};
 	};
 
-
 	$scope.save_question = function(){
 		console.log("Choose new or old");
-	}
+	};
 
 	$scope.save_new_question = function(){
 		console.log("Save New Question");
-	}
+	};
 
 	$scope.save_old_question = function(){
 		console.log("Save Old Question");
-	}
+	};
+
+	//EMPTY Form on modal close
+	$('#quizModal').on('hidden.bs.modal', function () {
+		// $(this).find('form').trigger('reset');
+		// $scope.selected_question = null;
+	})
 
 	// END QUIZ PART
 });
