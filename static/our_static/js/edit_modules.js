@@ -551,6 +551,12 @@ app.controller('myCtrl', function($scope, $http, $q) {
 
 	$scope.save_question = function(){
 		console.log("Choose new or old");
+		// If Question has an url it's already posted so call the patch method on that question and answers
+		// If no url present then it's a fresh question to be posted
+		// if($scope.selected_question !== undefined || $scope.selected_question !== null){
+		// 	console.log($scope.selected_question);
+		// };
+		console.log($scope.selected_question);
 	};
 
 	$scope.save_new_question = function(){

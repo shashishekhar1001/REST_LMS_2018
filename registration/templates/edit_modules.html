@@ -92,7 +92,7 @@
                                     </div>
                                 </div>
                                 <hr>
-                                <form class="form-horizontal">
+                                <form class="form-horizontal" ng-submit="save_question()">
                                     <div class="form-group">
                                         <label class="control-label col-sm-2" for="question">Question:</label>
                                         <div class="col-sm-10">
@@ -127,16 +127,16 @@
                                             <span class="glyphicon glyphicon-ok form-control-feedback" ng-show="selected_question.option_4 === selected_question.correct && selected_question.correct !== undefined"></span>                                            
                                         </div>
                                     </div>
-                                    <div class="form-group">        
+                                    <div class="form-group" ng-hide="selected_question.option_1 === undefined || selected_question.option_2 === undefined || selected_question.option_3 === undefined || selected_question.option_4 === undefined">        
                                         <label class="control-label col-sm-4" for="select_option">Select Correct Option :</label>
                                         <div class="col-sm-8">
-                                            <select class="form-control" ng-model="selected_question.correct" ng-options="item.text for item in selected_question.possible_answers"></select>
+                                            <select class="form-control" ng-model="selected_question.correct" ng-options="item.text for item in [selected_question.option_1, selected_question.option_2, selected_question.option_3, selected_question.option_4]"></select>
                                         </div>
                                     </div>
                                     <div class="form-group">        
                                         <label class="control-label col-sm-4" for="select_option">Selected Correct Option :</label>                                                                                                                            
                                         <div class="col-sm-8">
-                                            <input type="text" class="form-control" placeholder="Correct Option" ng-model="selected_question.correct.text">
+                                            <input type="text" class="form-control" placeholder="Correct Option" ng-model="selected_question.correct.text" ng-disabled="true">
                                         </div>
                                     </div>
                                     <div class="form-group">        
