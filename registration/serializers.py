@@ -44,11 +44,59 @@ class Answer_OptionsSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class Quiz_QuestionSerializer(serializers.HyperlinkedModelSerializer):
-    possible_answers = Answer_OptionsSerializer(many=True, read_only=True)
-    correct = Answer_OptionsSerializer(read_only=True)
+    possible_answers = Answer_OptionsSerializer(many=True)
+    correct = Answer_OptionsSerializer()
     class Meta:
         model = Quiz_Question
         fields = ('url', 'quiz', 'q_type', 'text', 'possible_answers', 'selected', 'correct')
+
+    def create(self, validated_data):
+        possible_answers_data = validated_data.pop('possible_answers')
+        selected_answers_data = validated_data.pop('selected')
+        correct_answers_data = validated_data.pop('correct')
+        quiz_question = Quiz_Question.objects.create(**validated_data)
+        if possible_answers_data:
+            for answer in possible_answers_data:
+                answer, created  = Answer_Options.objects.get_or_create(text=answer['text'])     
+                if (answer.text == correct_answers_data['text']):
+                    quiz_question.correct = answer 
+                    print quiz_question.correct                              
+                quiz_question.possible_answers.add(answer)
+        return quiz_question
+
+
+    def update(self, instance, validated_data):
+        instance.quiz = validated_data.get('quiz', instance.quiz)
+        instance.q_type = validated_data.get('q_type', instance.q_type)
+        instance.text = validated_data.get('text', instance.text)
+        instance.order = validated_data.get('order', instance.order)
+        try:
+            correct_answer = validated_data.pop('correct')
+            print correct_answer
+            if correct_answer:
+                correct_answer, created  = Answer_Options.objects.get_or_create(text=correct_answer['text'])
+                instance.correct = correct_answer
+        except:
+            pass
+        try:
+            selected_answer = validated_data.pop('selected')
+            print selected_answer
+        except:
+            pass
+        try:
+            possible_answers = validated_data.pop('possible_answers')
+            print possible_answers
+            if possible_answers:
+                possible_answers_list = []
+                for pa in possible_answers:
+                    answer, created  = Answer_Options.objects.get_or_create(text=pa['text'])
+                    possible_answers_list.append(answer)        
+                instance.possible_answers = possible_answers_list
+        except:
+            pass
+        print instance
+        instance.save()
+        return instance 
 
 
 
