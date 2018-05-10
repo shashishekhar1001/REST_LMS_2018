@@ -468,9 +468,6 @@ app.controller('myCtrl', function($scope, $http, $q) {
 
 	// QUIZ PART
 	$scope.quiz = function(object){
-		// console.log($scope.selected_question.correct);
-
-		// Check if quiz is present already
 		if (object.quiz[0] !== undefined){
 			console.log("Quiz Present");
 			$scope.quiz_name = object.quiz[0].quiz_name;
@@ -479,7 +476,6 @@ app.controller('myCtrl', function($scope, $http, $q) {
 			if ($scope.questions.length !== 0){
 				$scope.selected_question = $scope.questions[0];
 				$scope.selected_question.correct = $scope.questions[0].correct;
-				console.log($scope.selected_question);
 				$scope.selected_question.option_1 = $scope.selected_question.possible_answers[0];
 				$scope.selected_question.option_2 = $scope.selected_question.possible_answers[1];
 				$scope.selected_question.option_3 = $scope.selected_question.possible_answers[2];
@@ -549,22 +545,63 @@ app.controller('myCtrl', function($scope, $http, $q) {
 		};
 	};
 
+	$scope.select_question = function(quest){
+		$scope.selected_question = quest;
+	};
+
+	$scope.select_new_question = function(){
+		$scope.selected_question = null;
+	}
+
 	$scope.save_question = function(){
-		console.log("Choose new or old");
-		// If Question has an url it's already posted so call the patch method on that question and answers
-		// If no url present then it's a fresh question to be posted
-		// if($scope.selected_question !== undefined || $scope.selected_question !== null){
-		// 	console.log($scope.selected_question);
-		// };
-		console.log($scope.selected_question);
+		if($scope.selected_question.url === undefined || $scope.selected_question.url === null){
+			$scope.save_new_question();
+		}
+		else{
+			$scope.save_old_question();
+		};
 	};
 
 	$scope.save_new_question = function(){
 		console.log("Save New Question");
+		console.log($scope.selected_question);		
 	};
 
 	$scope.save_old_question = function(){
 		console.log("Save Old Question");
+		console.log($scope.selected_question);
+		var data = {
+			"quiz": $scope.selected_question.quiz,
+			"q_type": "MCQ",
+			"text": $scope.selected_question.text,
+			"possible_answers": [
+				{
+					"text": $scope.selected_question.possible_answers[0].text
+				},
+				{
+					"text": $scope.selected_question.possible_answers[1].text
+				},
+				{
+					"text": $scope.selected_question.possible_answers[2].text
+				},
+				{
+					"text": $scope.selected_question.possible_answers[3].text
+				}
+			],
+			"selected": null,
+			"correct": {"text": $scope.selected_question.correct.text}
+		};
+		var url = $scope.selected_question.url;
+		console.log(url);
+		console.log(data);
+		$http.patch(url, data).then(successCallback, errorCallback);
+		function successCallback(response){
+			swal("Good job!", "Question Updated!", "success");
+		};
+		function errorCallback(error){
+			console.log(error);
+			swal("Oops!", "Something went wrong!", "error");					
+		};				
 	};
 
 	//EMPTY Form on modal close

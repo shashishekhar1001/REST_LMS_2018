@@ -85,10 +85,10 @@
                             <div class="modal-body" ng-show="quiz_present">
                                 <div class="row">
                                     <div class="col-sm-1" ng-repeat="q in questions">
-                                        <button class="btn btn-danger">{{ $index + 1 }}</button>
+                                        <button class="btn btn-danger" ng-click="select_question(q)">{{ $index + 1 }}</button>
                                     </div>
                                     <div class="col-sm-1">
-                                        <button class="btn btn-success">+</button>
+                                        <button class="btn btn-success" ng-click="select_new_question()">+</button>
                                     </div>
                                 </div>
                                 <hr>

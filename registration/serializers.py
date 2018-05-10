@@ -60,10 +60,9 @@ class Quiz_QuestionSerializer(serializers.HyperlinkedModelSerializer):
                 answer, created  = Answer_Options.objects.get_or_create(text=answer['text'])     
                 if (answer.text == correct_answers_data['text']):
                     quiz_question.correct = answer 
-                    print quiz_question.correct                              
+                    quiz_question.save()                              
                 quiz_question.possible_answers.add(answer)
         return quiz_question
-
 
     def update(self, instance, validated_data):
         instance.quiz = validated_data.get('quiz', instance.quiz)
