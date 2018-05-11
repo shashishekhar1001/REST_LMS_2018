@@ -83,11 +83,11 @@
                                 </form>
                             </div>
                             <div class="modal-body" ng-show="quiz_present">
-                                <div class="row">
-                                    <div class="col-sm-1" ng-repeat="q in questions">
-                                        <button class="btn btn-danger" ng-click="select_question(q)">{{ $index + 1 }}</button>
+                                <div class="row">                                          
+                                    <div ng-class="{'col-sm-1': true}" ng-repeat="q in questions track by $index" style="margin:3px;">
+                                        <button class='btn btn-danger' ng-click="select_question(q)">{{ $index + 1 }}</button>
                                     </div>
-                                    <div class="col-sm-1">
+                                    <div class="col-sm-1" style="margin:3px;">
                                         <button class="btn btn-success" ng-click="select_new_question()">+</button>
                                     </div>
                                 </div>
@@ -140,13 +140,16 @@
                                         </div>
                                     </div>
                                     <div class="form-group">        
-                                        <div class="col-sm-offset-10 col-sm-2">
+                                        <div class="col-sm-offset-6 col-sm-4">
+                                            <button type="button" class="btn btn-danger" ng-click="delete_question()">DELETE</button>                                            
+                                        </div>
+                                        <div class="col-sm-2">
                                             <button type="submit" class="btn btn-primary">Save</button>
                                         </div>
                                     </div>
                                 </form>
                             </div>
-                            <div class="modal-footer" ng-if="selected_question !== null">
+                            <div class="modal-footer" ng-if="selected_question.url !== null">
                                 <!-- <button type="button" class="btn btn-danger" ng-click="delete_question()">DELETE</button> -->
                             </div>
                         </div>

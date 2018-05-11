@@ -532,9 +532,12 @@ app.controller('myCtrl', function($scope, $http, $q) {
 					if (response.status === 200){
 						$scope.quiz_present = true;
 						object.quiz = response.data.quiz;
+						console.log(object.quiz);
 						swal("Good job!", "Quiz Name Updated!", "success");
 					}
-					// console.log(response);
+					console.log(response);
+					$scope.selected_question = {};
+					$scope.questions = [];
 				};
 				function errorCallback(error){
 					console.log(error);
@@ -637,16 +640,19 @@ app.controller('myCtrl', function($scope, $http, $q) {
 
 		$scope.delete_question = function(){
 			console.log("DELETE THE SELECTED QUESTION:-");
-			console.log($scope.selected_question);
+			console.log($scope.selected_question.url);
 			var url = $scope.selected_question.url;
 			$http.delete(url).then(successCallback, errorCallback);	
 			function successCallback(response){
 				swal("Deleted Successfully.", {
 					icon: "success",
 				});
-				// var index = $scope.questions.indexOf($scope.selected_question);
+				var index = $scope.questions.indexOf($scope.selected_question);
+				console.log(index);
 				// $scope.questions.splice(index, 1);				
 				$scope.questions.splice( $scope.questions.indexOf($scope.selected_question), 1 );
+				console.log($scope.questions.length);
+				$scope.selected_question = $scope.questions[index];
 			};
 			function errorCallback(error){
 				swal("Deleting Cancelled!");					
