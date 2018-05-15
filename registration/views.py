@@ -222,32 +222,6 @@ def trainer_update_profile(request):
     return render(request, "trainer_update_profile.html", context)
 
 
-# @login_required(login_url='/authentication/login/', redirect_field_name='next')
-# def edit_course_modules(request, course_id=None, *args, **kwargs):
-#     print course_id
-#     print kwargs
-#     user = request.user
-#     cu = Custom_User.objects.get(user=user)
-#     trainer = Trainer_Model.objects.get(user=cu)
-#     if cu.primary_registration_type == 'Trainer':    
-#         course = Course.objects.get(course_by=trainer, id=course_id)
-#         formset = Course_ModuleFormSet(queryset = course.modules.all())
-#         if request.method == 'POST':
-#             formset = Course_ModuleFormSet(request.POST, queryset = course.modules.all())
-#             if formset.is_valid():
-#                 modules = formset.save(commit=False)
-
-#                 for module in modules:
-#                     module.part_of = course
-#                     module.save()
-#                 messages.success(request, "Course Updated.")
-#                 return HttpResponseRedirect('/authentication/edit_course_modules/' + str(course_id))
-#         context = {"formset":formset, 'course':course}
-#         return render(request, "inline.html", context)
-#     else:
-#         return HttpResponseRedirect('/invalid_trainer/')
-
-
 @login_required(login_url='/authentication/login/', redirect_field_name='next')
 def display_courses(request):
     user = request.user
@@ -370,17 +344,3 @@ def edit_course_modules(request, course_id=None, *args, **kwargs):
         return render(request, "edit_modules.html", {"course": course, "queryset": queryset})
     else:
         return HttpResponseRedirect('/invalid_trainer/')
-
-
-
-# @login_required(login_url='/authentication/login/', redirect_field_name='next')
-# def edit_single_module(request, course_id=None, *args, **kwargs):
-#     user = request.user
-#     cu = Custom_User.objects.get(user=user)
-#     trainer = Trainer_Model.objects.get(user=cu)
-#     if cu.primary_registration_type == 'Trainer':    
-#         course = Course.objects.get(course_by=trainer, id=course_id)
-#         queryset = course.modules.all()
-#         return render(request, "edit_modules.html", {"course": course, "queryset": queryset})
-#     else:
-#         return HttpResponseRedirect('/invalid_trainer/')
