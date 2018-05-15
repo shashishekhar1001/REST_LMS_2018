@@ -594,6 +594,8 @@ app.controller('myCtrl', function($scope, $http, $q) {
 			};
 			$http.post(url, data).then(successCallback, errorCallback);
 			function successCallback(response){
+				$scope.selected_question.url = response.data.url;
+				console.log($scope.selected_question);				
 				$scope.questions.push($scope.selected_question);
 				swal("Good job!", "Question Saved!", "success");
 			};
