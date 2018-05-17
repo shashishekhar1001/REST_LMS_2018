@@ -29,7 +29,6 @@
             {% verbatim %}
                 <div id="list" ui-sortable="sortableOptions" ng-model="modules">
                     <div ng-repeat="each in modules  | orderBy : 'order'">
-                    <!-- <div ng-repeat="each in modules  | orderBy : 'order'"> -->
                         <div class="row">
                             <div class="col-sm-1">
                                 <h3> {{ each.order }} </h3>

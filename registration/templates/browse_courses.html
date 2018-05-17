@@ -38,12 +38,73 @@
                         <ng-rate-it ng-model="course.rating" read-only="true"></ng-rate-it>
                         {{course.rating}} Stars |
                         ({{ course.no_of_ratings }}) Ratings
-                        <a href="#" class="btn btn-primary" style="width: 100%;">View</a>
+                        <a href="#" class="btn btn-primary" style="width: 100%;" data-toggle="modal" data-target="#myModal" ng-click="select_course(course)">View</a>
                     </div>
                 </div>
             </div>
         </div>
-        <hr>        
+        <hr>
+        <!-- Modal -->
+        <div class="modal fade" id="myModal" role="dialog">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <div class="row">
+                            <div class="col-sm-2">
+                                <img ng-src="{{ selected_course.thumbnail }}" alt="{{ selected_course.course_name }}" style="height: 100px; width: 100px;">
+                            </div>
+                            <div class="col-sm-6">
+                                <h2 class="modal-title">{{ selected_course.course_name }}</h2>
+                                <h4 class="modal-title">{{ selected_course.author }}</h4>
+                                <ng-rate-it ng-model="selected_course.rating" read-only="true"></ng-rate-it>
+                                {{selected_course.rating}} Stars |
+                                ({{ selected_course.no_of_ratings }}) Ratings
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-body">
+                        <div ng-hide="modules_visible">
+                            <h3>Description:-</h3>
+                            <p>
+                                {{ selected_course.description }}
+                            </p>
+                            <hr>
+                            <h3>Prerequisite:-</h3>
+                            <p>
+                                {{ selected_course.prerequisite }}
+                            </p>
+                            <hr>
+                            <h3>Requirements:-</h3>
+                            <p>
+                                {{ selected_course.requirements }}
+                            </p>
+                        </div>
+                        <div ng-show="modules_visible">
+                            <h1>Course Modules</h1>
+                            <div ng-repeat="each in selected_course.modules  | orderBy : 'order'">
+                                <div class="row">
+                                    <div class="col-sm-1">
+                                        <h3> {{ $index + 1 }} </h3>
+                                    </div>
+                                    <div class="col-sm-5">
+                                        <h3> {{ each.name }} </h3>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <h3 ng-if="each.topics !== 'undefined'"> {{ each.topics }} </h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <!-- <a class="btn btn-primary" href="/authentication/browse_course_details/{{ selected_course.id }}">Overview</a>                         -->
+                        <button type="button" class="btn btn-primary" ng-click="show_modules()">Overview</button>                        
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>                        
+                    </div>
+                </div>
+            </div>
+        </div>        
     </div>
     {% endverbatim %}       
 </body> 

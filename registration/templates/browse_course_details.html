@@ -1,0 +1,49 @@
+{% load i18n %}
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Edit Course Modules</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="{% static 'js/angular.min.js' %}"></script>    
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>      
+    <script src="{% static 'js/sortable.js' %}"></script>            
+</head>
+<body>
+     <div class="container" ng-app="edit_modules" ng-controller="myCtrl">   
+        <div style="text-align:center;">
+            <h1>Course Modules</h1>
+            <!-- <h3>{{ course }}</h3> -->
+            <h3 id="course_id" ng-hide="true">{{ course.id }}</h3>
+            <h3 id="csrf" ng-hide="true">{{ csrf_token }}</h3>
+            <br>
+            <hr>
+        </div>
+        <div>
+            {% verbatim %}
+                <div id="list" ui-sortable="sortableOptions" ng-model="modules">
+                    <div ng-repeat="each in modules  | orderBy : 'order'">
+                        <div class="row">
+                            <div class="col-sm-1">
+                                <h3> {{ $index + 1 }} </h3>
+                            </div>
+                            <div class="col-sm-6">
+                                <h3> {{ each.name }} </h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+            {% endverbatim %}
+            <br>            
+        </div>        
+    </div>
+    <script src="{% static 'js/edit_modules.js' %}"></script>
+</body>
+</html>

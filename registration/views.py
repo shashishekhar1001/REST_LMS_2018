@@ -350,3 +350,9 @@ def edit_course_modules(request, course_id=None, *args, **kwargs):
 def browse_courses(request):
     context = {}
     return render(request, "browse_courses.html", context)
+
+
+def browse_course_details(request, course_id=None):
+    course = get_object_or_404(Course, id=course_id)
+    context = {"course": course}
+    return render(request, "browse_course_details.html", context)
