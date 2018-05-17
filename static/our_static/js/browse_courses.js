@@ -63,4 +63,10 @@ app.controller('myCtrl', function($scope, $http, $q) {
 		$scope.modules_visible = true;
 	}
 	// END SHOW SELECTED MODULES
+
+	// HIDE MODULES ON MODAL CLOSE
+	$('#myModal').on('hidden.bs.modal', function () {
+		$scope.modules_visible = false;
+	})
+	// END HIDE MODULES ON MODAL CLOSE
 });
