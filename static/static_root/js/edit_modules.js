@@ -10,6 +10,7 @@ app.config(function($httpProvider) {
 });
 
 app.controller('myCtrl', function($scope, $http, $q) {
+
 	$scope.form_info = {};
 	
 	var course_id = document.getElementById("course_id").innerHTML;
@@ -368,6 +369,7 @@ app.controller('myCtrl', function($scope, $http, $q) {
 
 
 	// Unpopulate form
+	// Empty Form
 	$scope.empty_form = function(){
 		console.log("Empty Form");	
 		$('#add_form')[0].reset();
@@ -466,8 +468,6 @@ app.controller('myCtrl', function($scope, $http, $q) {
 
 	// QUIZ PART
 	$scope.quiz = function(object){
-
-		// Check if quiz is present already
 		if (object.quiz[0] !== undefined){
 			console.log("Quiz Present");
 			$scope.quiz_name = object.quiz[0].quiz_name;
@@ -475,10 +475,15 @@ app.controller('myCtrl', function($scope, $http, $q) {
 			$scope.questions = object.quiz[0].questions;
 			if ($scope.questions.length !== 0){
 				$scope.selected_question = $scope.questions[0];
-				console.log($scope.selected_question);
+				$scope.selected_question.correct = $scope.questions[0].correct;
+				$scope.selected_question.option_1 = $scope.selected_question.possible_answers[0];
+				$scope.selected_question.option_2 = $scope.selected_question.possible_answers[1];
+				$scope.selected_question.option_3 = $scope.selected_question.possible_answers[2];
+				$scope.selected_question.option_4 = $scope.selected_question.possible_answers[3];
 			}
 			else{
-				console.log("Add new Question!");
+				console.log("Add first Question!");
+				$scope.selected_question = null;
 			};
 		}
 		else{
@@ -527,9 +532,12 @@ app.controller('myCtrl', function($scope, $http, $q) {
 					if (response.status === 200){
 						$scope.quiz_present = true;
 						object.quiz = response.data.quiz;
+						console.log(object.quiz);
 						swal("Good job!", "Quiz Name Updated!", "success");
 					}
-					// console.log(response);
+					console.log(response);
+					$scope.selected_question = {};
+					$scope.questions = [];
 				};
 				function errorCallback(error){
 					console.log(error);
@@ -538,7 +546,126 @@ app.controller('myCtrl', function($scope, $http, $q) {
 			};
 			// END IF QUIZ NOT PRESENT
 		};
-	};
 
+		$scope.select_question = function(quest){
+			$scope.selected_question = quest;
+			$scope.selected_question.option_1 = $scope.selected_question.possible_answers[0];
+			$scope.selected_question.option_2 = $scope.selected_question.possible_answers[1];
+			$scope.selected_question.option_3 = $scope.selected_question.possible_answers[2];
+			$scope.selected_question.option_4 = $scope.selected_question.possible_answers[3];
+		};
+	
+		$scope.select_new_question = function(){
+			$scope.selected_question = null;
+		}
+	
+		$scope.save_question = function(){
+			if($scope.selected_question.url === undefined || $scope.selected_question.url === null){
+				$scope.save_new_question();
+			}
+			else{
+				$scope.save_old_question();
+			};
+		};
+	
+		$scope.save_new_question = function(){
+			console.log("Save New Question");
+			var url = "/api/registration_quiz_questions/"
+			var data = {
+				"quiz": object.quiz[0].url,
+				"q_type": "MCQ",
+				"text": $scope.selected_question.text,
+				"possible_answers": [
+					{
+						"text": $scope.selected_question.option_1.text
+					},
+					{
+						"text": $scope.selected_question.option_2.text
+					},
+					{
+						"text": $scope.selected_question.option_3.text
+					},
+					{
+						"text": $scope.selected_question.option_4.text
+					}
+				],
+				"selected": null,
+				"correct": {"text": $scope.selected_question.correct.text}
+			};
+			$http.post(url, data).then(successCallback, errorCallback);
+			function successCallback(response){
+				$scope.selected_question.url = response.data.url;
+				console.log($scope.selected_question);				
+				$scope.questions.push($scope.selected_question);
+				swal("Good job!", "Question Saved!", "success");
+			};
+			function errorCallback(error){
+				console.log(error);
+				swal("Oops!", "Something went wrong!", "error");					
+			};				
+		};
+	
+		$scope.save_old_question = function(){
+			console.log("Save Old Question");
+			console.log($scope.selected_question);
+			var data = {
+				"quiz": $scope.selected_question.quiz,
+				"q_type": "MCQ",
+				"text": $scope.selected_question.text,
+				"possible_answers": [
+					{
+						"text": $scope.selected_question.possible_answers[0].text
+					},
+					{
+						"text": $scope.selected_question.possible_answers[1].text
+					},
+					{
+						"text": $scope.selected_question.possible_answers[2].text
+					},
+					{
+						"text": $scope.selected_question.possible_answers[3].text
+					}
+				],
+				"selected": null,
+				"correct": {"text": $scope.selected_question.correct.text}
+			};
+			var url = $scope.selected_question.url;
+			$http.patch(url, data).then(successCallback, errorCallback);
+			function successCallback(response){
+				swal("Good job!", "Question Updated!", "success");
+			};
+			function errorCallback(error){
+				console.log(error);
+				swal("Oops!", "Something went wrong!", "error");					
+			};				
+		};
+
+		$scope.delete_question = function(){
+			console.log("DELETE THE SELECTED QUESTION:-");
+			console.log($scope.selected_question.url);
+			var url = $scope.selected_question.url;
+			$http.delete(url).then(successCallback, errorCallback);	
+			function successCallback(response){
+				swal("Deleted Successfully.", {
+					icon: "success",
+				});
+				var index = $scope.questions.indexOf($scope.selected_question);
+				console.log(index);
+				// $scope.questions.splice(index, 1);				
+				$scope.questions.splice( $scope.questions.indexOf($scope.selected_question), 1 );
+				console.log($scope.questions.length);
+				$scope.selected_question = $scope.questions[index];
+			};
+			function errorCallback(error){
+				swal("Deleting Cancelled!");					
+			};
+		};
+	};
 	// END QUIZ PART
+	
+	//EMPTY Form on modal close
+	$('#quizModal').on('hidden.bs.modal', function () {
+		// $(this).find('form').trigger('reset');
+		// $scope.selected_question = null;
+	});
 });

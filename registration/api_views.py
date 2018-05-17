@@ -4,6 +4,7 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework import generics
 from .serializers import *
+from rest_framework.pagination import PageNumberPagination
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
@@ -58,3 +59,30 @@ class QuizViewSet(viewsets.ModelViewSet):
 class Quiz_QuestionViewSet(viewsets.ModelViewSet):
     queryset = Quiz_Question.objects.all()
     serializer_class = Quiz_QuestionSerializer
+
+
+
+# PAGINATION BASED SETTINGS (SMALL, STANDARD, LARGE)
+class LargeResultsSetPagination(PageNumberPagination):
+    page_size = 1000
+    page_size_query_param = 'page_size'
+    max_page_size = 10000
+
+class StandardResultsSetPagination(PageNumberPagination):
+    page_size = 100
+    page_size_query_param = 'page_size'
+    max_page_size = 1000
+
+class SmallResultsSetPagination(PageNumberPagination):
+    page_size = 10  #Change the number of objects per page to be visible over here
+    page_size_query_param = 'page_size'
+    max_page_size = 100
+
+
+# PAGINATED COURSES VIEW
+
+
+class PaginatedCourseViewSet(viewsets.ModelViewSet):
+    queryset = Course.objects.all()
+    serializer_class = CourseSerializer
+    pagination_class = SmallResultsSetPagination

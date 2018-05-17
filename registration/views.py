@@ -344,3 +344,9 @@ def edit_course_modules(request, course_id=None, *args, **kwargs):
         return render(request, "edit_modules.html", {"course": course, "queryset": queryset})
     else:
         return HttpResponseRedirect('/invalid_trainer/')
+
+
+
+def browse_courses(request):
+    context = {}
+    return render(request, "browse_courses.html", context)

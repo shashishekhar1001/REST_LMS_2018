@@ -12,4 +12,5 @@ urlpatterns = [
     url(r'^add_course/', 'registration.views.add_course', name='add_course'),
     url(r'^test/', 'registration.views.test_view', name='test_view'),
     url(r'^edit_course_details/(?P<course_id>\d+)', 'registration.views.edit_course_details', name='edit_course_details'),    
+    url(r'^browse_courses/', 'registration.views.browse_courses', name='browse_courses'),    
 ]

@@ -1,0 +1,44 @@
+{% load i18n %}
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Browse Courses</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">    
+    <link rel="stylesheet" href="{% static 'css/sr.min.css' %}" media="all" type="text/css"/>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="{% static 'js/sr.min.js' %}"></script>                 
+    <script src="{% static 'js/angular.min.js' %}"></script>             
+    <script src="{% static 'js/browse_courses.js' %}"></script>    
+    
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>     
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    
+</head>
+<body>
+    <div class="container" ng-app="browse_courses" ng-controller="myCtrl">
+        <h1>Browse All Courses:-</h1>
+        <hr>
+        {% verbatim %}
+            <div class="col-sm-2" ng-repeat="course in courses.results" style="padding: 10px;">
+                <div class="card">
+                    <img class="card-img-top" ng-src="{{ course.thumbnail }}" alt="Card image" style="width:100%">
+                    <div class="card-body" style="text-align: center;">
+                        <h3 class="card-title">{{ course.course_name }}</h3>
+                        <h6 class="card-text">{{ course.author }}</h6>
+                        <input id="input-3" name="input-3" value="{{ course.no_of_ratings }}" class="rating rating-loading" data-size="xs" data-show-clear="false" type="text">
+                        ({{ course.no_of_ratings }}) Ratings
+                        <a href="#" class="btn btn-primary" style="width: 100%;">View</a>
+                    </div>
+                </div>
+            </div>
+        {% endverbatim %}
+    </div>
+
+</body> 
+</html>

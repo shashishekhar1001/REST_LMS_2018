@@ -21,6 +21,7 @@ router.register(r'registration_courses_modules', registration_api_views.Course_M
 router.register(r'registration_answer_options', registration_api_views.Answer_OptionsViewSet)
 router.register(r'registration_quiz', registration_api_views.QuizViewSet)
 router.register(r'registration_quiz_questions', registration_api_views.Quiz_QuestionViewSet)
+router.register(r'paginated_courses', registration_api_views.PaginatedCourseViewSet)
 
 
 urlpatterns = [

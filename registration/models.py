@@ -56,9 +56,17 @@ class Course(models.Model):
     description = models.TextField()
     prerequisite = models.TextField()
     requirements = models.TextField()
+    rating = models.FloatField(default=0)
+    no_of_ratings = models.FloatField(default=0)
+    author = models.CharField(max_length=200, blank=True, default=None, null=True)
 
     def get_absolute_url(self):
         return reverse('edit_course', kwargs={'course_id': self.id})
+
+    def save(self, *args, **kwargs):
+        if getattr(self, 'author_changed', True):
+            self.author = self.course_by.user.user.get_full_name()
+        super(Course, self).save(*args, **kwargs)
 
     def __unicode__(self):
         return self.course_name + "  --By " + self.course_by.user.user.get_full_name()
