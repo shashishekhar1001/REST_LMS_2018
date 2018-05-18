@@ -32,4 +32,36 @@ app.controller('myCtrl', function($scope, $http, $q) {
 	function errorCallback(error){
 		alert("Error Loading Page!");
 	};
+
+
+	$scope.view_module = function(object, index){
+		$scope.selected = object;
+		if($scope.selected.topics === "undefined"){
+			$scope.selected.topics = "No Topics Added."
+		};
+		try{
+			$scope.selected.assignment_name = unescape($scope.selected.Assignment.split('/').pop());
+		}
+		catch(err){
+			$scope.selected.assignment_name = "No File!";
+		};
+		try{
+			$scope.selected.presentation_name = unescape($scope.selected.Presentation.split('/').pop());
+		}
+		catch(err){
+			$scope.selected.presentation_name = "No File!";
+		};
+		try{
+			$scope.selected.video_name = unescape($scope.selected.video.split('/').pop());
+		}
+		catch(err){
+			$scope.selected.video_name = "No File!";
+		};
+		try{
+			$scope.selected.reference_name = unescape($scope.selected.Refernce.split('/').pop());
+		}
+		catch(err){
+			$scope.selected.reference_name = "No File!";
+		};
+	};
 });
