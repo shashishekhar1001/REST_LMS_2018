@@ -122,17 +122,12 @@ def my_login(request):
     if form.is_valid():
         email = form.cleaned_data.get("email")
         password = form.cleaned_data.get("password")
-        print email
-        print password
         try:
             user = User.objects.get(email=email) 
             username = user.username
-            print user
             user = authenticate(username=username, password=password)
-            print user
         except:
             raise forms.ValidationError("User not found")
-        print user
         if user is not None:
             if user.is_active:
                 login(request, user)
@@ -353,6 +348,34 @@ def browse_courses(request):
 
 
 def browse_course_details(request, course_id=None):
+    learner = False
+    if request.user.is_authenticated():
+        try:
+            custom_user = Custom_User.objects.get(user = request.user)
+            print custom_user
+            if str(custom_user.primary_registration_type) == "Learner":
+                print "Learner"
+                learner = True
+        except:
+            pass
     course = get_object_or_404(Course, id=course_id)
-    context = {"course": course}
+    modules = course.modules.all().order_by('order')
+    print modules
+    if learner == True:
+        print "Search for subscribed courses."
+        print course.course_name
+        try:
+            student = Learner_Model.objects.get(user=custom_user)
+        except:
+            print "2 or more students."
+        if course in student.courses_subscribed.all():
+            print "Allow access to the course content"
+            allow_access = True
+            print allow_access
+        else:
+            allow_access = False
+            print allow_access
+    else:
+        allow_access = False   
+    context = {"course": course, "allow_access": allow_access, "modules": modules}
     return render(request, "browse_course_details.html", context)

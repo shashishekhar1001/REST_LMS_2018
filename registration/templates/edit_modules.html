@@ -160,63 +160,69 @@
 
                 <!-- ADD Modal -->
                 <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Add Module:-</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <form class="form-horizontal" id="add_form">
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-2" for="name">Module Name:</label>
-                                            <div class="col-sm-10">
-                                                <input type="text" class="form-control" id="name" placeholder="Module Name" name="module_name" ng-model="new_module_name" ng-required="true">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-2" for="new_ass">Assignment:</label>
-                                            <div class="col-sm-10">          
-                                                <input type="file" class="form-control" id="new_ass" placeholder="Assignment" name="Assignment">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-2" for="new_pres">Presentation:</label>
-                                            <div class="col-sm-10">          
-                                                <input type="file" class="form-control" id="new_pres" placeholder="Presentation" name="Presentation">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-2" for="new_vdo">Video:</label>
-                                            <div class="col-sm-10">          
-                                                <input type="file" class="form-control" id="new_vdo" placeholder="Video" name="Video">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label col-sm-2" for="Topics">Topics:</label>
-                                            <div class="col-sm-10">          
-                                                <input type="input" class="form-control" id="Topics" placeholder="Topics" name="Topics" ng-model="new_module_topics">
-                                            </div>
-                                        </div>
-                                        <button type="submit" class="btn btn-primary" ng-click="add_module()" ng-disabled="show_add_progrsess_bar">Create Module</button>                                        
-                                        <button type="button" class="btn btn-danger" ng-click="add_cancel()" ng-show="show_add_progrsess_bar">Abort</button>                                        
-                                    </form>
-                                </div>
-                                <div class="modal-footer">
-                                    <div class="progress" ng-show="show_add_progrsess_bar">
-                                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="{{addmodule_progressBar}}" aria-valuemin="0" aria-valuemax="100" style="width: {{addmodule_progressBar}}%">
-                                            {{addmodule_progressBar}}%
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Add Module:-</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form class="form-horizontal" id="add_form">
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-2" for="name">Module Name:</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control" id="name" placeholder="Module Name" name="module_name" ng-model="new_module_name" ng-required="true">
                                         </div>
                                     </div>
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-2" for="new_ass">Assignment:</label>
+                                        <div class="col-sm-10">          
+                                            <input type="file" class="form-control" id="new_ass" placeholder="Assignment" name="Assignment">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-2" for="new_pres">Presentation:</label>
+                                        <div class="col-sm-10">          
+                                            <input type="file" class="form-control" id="new_pres" placeholder="Presentation" name="Presentation">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-2" for="new_vdo">Video:</label>
+                                        <div class="col-sm-10">          
+                                            <input type="file" class="form-control" id="new_vdo" placeholder="Video" name="Video">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-2" for="new_ref">Refernce:</label>
+                                        <div class="col-sm-10">          
+                                            <input type="file" class="form-control" id="new_ref" placeholder="Refernce" name="Refernce">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-2" for="Topics">Topics:</label>
+                                        <div class="col-sm-10">          
+                                            <input type="input" class="form-control" id="Topics" placeholder="Topics" name="Topics" ng-model="new_module_topics">
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary" ng-click="add_module()" ng-disabled="show_add_progrsess_bar">Create Module</button>                                        
+                                    <button type="button" class="btn btn-danger" ng-click="add_cancel()" ng-show="show_add_progrsess_bar">Abort</button>                                        
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <div class="progress" ng-show="show_add_progrsess_bar">
+                                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="{{addmodule_progressBar}}" aria-valuemin="0" aria-valuemax="100" style="width: {{addmodule_progressBar}}%">
+                                        {{addmodule_progressBar}}%
+                                    </div>
                                 </div>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                             </div>
                         </div>
                     </div>
-                    <!-- End ADD Modal -->
-    
+                </div>
+                <!-- End ADD Modal -->
+
 
                 <!-- View Modal -->
                 <div class="modal fade" id="viewModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -261,6 +267,15 @@
                                         </div>
                                         <div class="col-sm-2">          
                                             <a ng-href="{{ selected.video }}" target="_blank">Preview</a>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-2" for="Video">References:</label>
+                                        <div class="col-sm-8">          
+                                            <input type="input" class="form-control" id="Reference" placeholder="Reference" name="Reference" value="{{ selected.reference_name }}" disabled>
+                                        </div>
+                                        <div class="col-sm-2">          
+                                            <a ng-href="{{ selected.Refernce }}" target="_blank">Preview</a>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -356,6 +371,25 @@
                                             </div>
                                             <button class="btn btn-danger" ng-click="vdo_cancel()"  ng-show="show_vdo_progrsess_bar">Abort</button>         
                                         </div>   
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-2" for="Refernce">Refernce:</label>
+                                        <div class="col-sm-8">          
+                                            <input type="file" class="form-control" id="ref" placeholder="Refernce" name="Refernce" value="{{ selected.reference_name }}">
+                                            <label for="ref">Current File:- <a ng-href="{{ selected.Refernce }}" target="_blank">{{ selected.reference_name }}</a></label>
+                                            <div class="progress" ng-show="show_ref_progrsess_bar">
+                                                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="{{refprogressBar}}" aria-valuemin="0" aria-valuemax="100" style="width: {{refprogressBar}}%">
+                                                    {{refprogressBar}}%
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-2">          
+                                            <button class="btn btn-info" ng-click="ref_upload()">Upload</button>     
+                                            <div>
+                                                <br>
+                                            </div>
+                                            <button class="btn btn-danger" ng-click="ref_cancel()"  ng-show="show_ref_progrsess_bar">Abort</button>         
+                                        </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="control-label col-sm-2" for="Topics">Topics:</label>

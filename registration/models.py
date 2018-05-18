@@ -40,15 +40,6 @@ class Trainer_Model(models.Model):
         return self.user.user.email
 
 
-class Learner_Model(models.Model):
-    user = models.ForeignKey(Custom_User, on_delete=models.CASCADE)
-    profile_picture = models.ImageField(upload_to='profile_pics/%Y/%m/%d/', blank=True)
-    courses_learning = models.TextField()
-
-    def __unicode__(self):
-        return self.user.user.email
-
-
 class Course(models.Model):
     thumbnail = models.ImageField(upload_to='Course_Thumbnails/%Y/%m/%d/', blank=True)
     course_by = models.ForeignKey(Trainer_Model)
@@ -81,6 +72,9 @@ def content_pptfile_name(instance, filename):
 def content_assignmentfile_name(instance, filename):
     return '/'.join(['Assignments', instance.part_of.course_by.user.user.get_full_name(), instance.part_of.course_name, filename])
 
+def content_referencefile_name(instance, filename):
+    return '/'.join(['References', instance.part_of.course_by.user.user.get_full_name(), instance.part_of.course_name, filename])
+
 
 class Course_Module(models.Model):
     part_of = models.ForeignKey(Course, related_name='modules')
@@ -100,6 +94,12 @@ class Course_Module(models.Model):
 
     Assignment = models.FileField(   
         upload_to=content_assignmentfile_name,        
+        blank=True,
+        null=True
+    )
+
+    Refernce = models.FileField(   
+        upload_to=content_referencefile_name,        
         blank=True,
         null=True
     )
@@ -160,3 +160,12 @@ class Quiz_Question(models.Model):
         verbose_name = "Quiz Question"
         verbose_name_plural = "Quiz Questions"
 
+
+class Learner_Model(models.Model):
+    user = models.ForeignKey(Custom_User, on_delete=models.CASCADE)
+    profile_picture = models.ImageField(upload_to='profile_pics/%Y/%m/%d/', blank=True)
+    courses_learning = models.TextField()
+    courses_subscribed = models.ManyToManyField(Course, blank=True, null=True)
+
+    def __unicode__(self):
+        return self.user.user.email
