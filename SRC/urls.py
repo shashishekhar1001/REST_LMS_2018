@@ -22,6 +22,8 @@ router.register(r'registration_answer_options', registration_api_views.Answer_Op
 router.register(r'registration_quiz', registration_api_views.QuizViewSet)
 router.register(r'registration_quiz_questions', registration_api_views.Quiz_QuestionViewSet)
 router.register(r'paginated_courses', registration_api_views.PaginatedCourseViewSet)
+router.register(r'learner_qa/(?P<quiz_id>[0-9]+)', registration_api_views.LearnerQuestionAnswerList, base_name="learner_qa")
+router.register(r'learner_qa', registration_api_views.LearnerQuestionAnswerViewSet)
 
 
 urlpatterns = [

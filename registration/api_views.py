@@ -5,6 +5,8 @@ from rest_framework.response import Response
 from rest_framework import generics
 from .serializers import *
 from rest_framework.pagination import PageNumberPagination
+from rest_framework import generics
+from django.shortcuts import get_list_or_404, get_object_or_404
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
@@ -86,3 +88,40 @@ class PaginatedCourseViewSet(viewsets.ModelViewSet):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
     pagination_class = SmallResultsSetPagination
+
+
+# Learner QnA's API for POST
+class LearnerQuestionAnswerViewSet(viewsets.ModelViewSet):
+    queryset = LearnerQuestionAnswer.objects.all()
+    serializer_class = LearnerQuestionAnswerSerializer
+
+
+# Learner QnA's List
+class LearnerQuestionAnswerList(viewsets.ModelViewSet):
+    serializer_class = LearnerQuestionAnswerSerializer
+
+    def get_queryset(self):
+        if self.request.user.is_authenticated():
+            try:
+                print "Inside Queryset"
+                custom_user = Custom_User.objects.get(user = self.request.user)
+                print custom_user
+                if str(custom_user.primary_registration_type) == "Learner":
+                    print "Learner"
+                    learner = Learner_Model.objects.get(user=custom_user)
+                    print learner
+                    try:
+                        quiz_id = self.kwargs['quiz_id']
+                        print quiz_id
+                        quiz = get_object_or_404(Quiz, id=quiz_id)
+                        if quiz:
+                            print quiz
+                            return LearnerQuestionAnswer.objects.filter(quiz_question__quiz=quiz, learner=learner)                                            
+                    except Exception as e:
+                        print e
+            except Exception as e:
+                print e
+                print "Not a Learner or an unauthorized user or not a subscribed person."
+                pass
+        else:
+            pass

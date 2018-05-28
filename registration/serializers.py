@@ -152,3 +152,12 @@ class CourseSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('url', 'id', 'thumbnail', 'course_by', 'author', 'course_name', 'rating', 'no_of_ratings', 'description', 'prerequisite', 'requirements', 'modules')
         
 
+
+
+class LearnerQuestionAnswerSerializer(serializers.HyperlinkedModelSerializer):
+    quiz_question = Quiz_QuestionSerializer()
+    learner = Learner_ModelSerializer()
+    chosen_option = Answer_OptionsSerializer()
+    class Meta:
+        model = LearnerQuestionAnswer
+        fields = ('quiz_question', 'learner', 'chosen_option')

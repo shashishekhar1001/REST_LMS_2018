@@ -23,11 +23,7 @@ app.controller('myCtrl', function($scope, $http, $q) {
 	function successCallback(response){
 		$scope.course = response.data;
 		$scope.modules = $scope.course.modules;
-		$scope.sortableOptions = {
-			stop: function(e, ui) {
-				$scope.update_order(); 
-			},
-		};
+		console.log($scope.modules)
 	};
 	function errorCallback(error){
 		alert("Error Loading Page!");
@@ -63,5 +59,10 @@ app.controller('myCtrl', function($scope, $http, $q) {
 		catch(err){
 			$scope.selected.reference_name = "No File!";
 		};
+	};
+
+	$scope.take_quiz = function(object){
+		console.log(object.quiz[0]);
+		console.log(object.quiz[0].questions[0]);
 	};
 });

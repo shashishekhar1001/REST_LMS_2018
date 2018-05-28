@@ -365,13 +365,17 @@ def browse_course_details(request, course_id=None):
         print "Search for subscribed courses."
         print course.course_name
         try:
+            print "Inside Try"
             student = Learner_Model.objects.get(user=custom_user)
+            print student
         except:
-            print "2 or more students."
-        if course in student.courses_subscribed.all():
-            print "Allow access to the course content"
-            allow_access = True
-            print allow_access
+            print "2 or more students or not in Learner Model."
+            student = None
+        if student != None:
+            if course in student.courses_subscribed.all():
+                print "Allow access to the course content"
+                allow_access = True
+                print allow_access
         else:
             allow_access = False
             print allow_access

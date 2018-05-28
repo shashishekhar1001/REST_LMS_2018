@@ -169,3 +169,10 @@ class Learner_Model(models.Model):
 
     def __unicode__(self):
         return self.user.user.email
+
+
+
+class LearnerQuestionAnswer(models.Model):
+    quiz_question = models.ForeignKey(Quiz_Question, on_delete=models.CASCADE)
+    learner = models.ForeignKey(Learner_Model, on_delete=models.CASCADE)
+    chosen_option = models.ForeignKey(Answer_Options, related_name="chosen_option", default=None, on_delete=models.CASCADE, blank=True, null=True)
