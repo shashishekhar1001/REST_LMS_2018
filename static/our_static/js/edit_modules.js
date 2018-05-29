@@ -748,6 +748,10 @@ app.controller('myCtrl', function($scope, $http, $q) {
 				$scope.questions.splice( $scope.questions.indexOf($scope.selected_question), 1 );
 				console.log($scope.questions.length);
 				$scope.selected_question = $scope.questions[index];
+				$scope.selected_question.option_1 = $scope.questions[index].possible_answers[0];
+				$scope.selected_question.option_2 = $scope.questions[index].possible_answers[1];
+				$scope.selected_question.option_3 = $scope.questions[index].possible_answers[2];
+				$scope.selected_question.option_4 = $scope.questions[index].possible_answers[3];
 			};
 			function errorCallback(error){
 				swal("Deleting Cancelled!");					

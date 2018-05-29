@@ -23,6 +23,7 @@
             <!-- <h3>{{ course }}</h3> -->
             <h3 id="course_id" ng-hide="true">{{ course.id }}</h3>
             <h3 id="csrf" ng-hide="true">{{ csrf_token }}</h3>
+            <h3 id="learner_id" ng-hide="true">{{ learner_id }}</h3>
             <br>
             <hr>
         </div>
@@ -49,6 +50,79 @@
                     </div>
                 </div>
                 <hr>
+
+                <!-- NEW QUIZ MODAL -->
+                <div id="quizModal" class="modal fade" role="dialog">
+                    <div class="modal-dialog">
+                    
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4>Quiz {{ quiz_name }}:- </h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">                                          
+                                    <div ng-class="{'col-sm-1': true}" ng-repeat="q in questions track by $index" style="margin:3px;">
+                                        <button class='btn btn-danger' ng-click="select_question(q)">{{ $index + 1 }}</button>
+                                    </div>
+                                </div>
+                                <hr>
+                                <form class="form-horizontal" ng-submit="submit_quiz()">
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-2" for="question">Question:</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control" id="question" placeholder="Enter question" name="question" ng-required="true" ng-model="selected_question.text" ng-disabled="true">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">        
+                                        <label class="control-label col-sm-3" for="option1">Option 1:</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" id="option1" placeholder="Enter Option" name="option1" ng-required="true" ng-model="selected_question.possible_answers[0].text" ng-disabled="true">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">        
+                                        <label class="control-label col-sm-3" for="option2">Option 2:</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" id="option2" placeholder="Enter Option" name="option2" ng-required="true" ng-model="selected_question.possible_answers[1].text" ng-disabled="true">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">        
+                                        <label class="control-label col-sm-3" for="option3">Option 3:</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" id="option3" placeholder="Enter Option" name="option3" ng-required="true" ng-model="selected_question.possible_answers[2].text" ng-disabled="true">       
+                                        </div>
+                                    </div>
+                                    <div class="form-group">        
+                                        <label class="control-label col-sm-3" for="option4">Option 4:</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" id="option4" placeholder="Enter Option" name="option4" ng-required="true" ng-model="selected_question.possible_answers[3].text" ng-disabled="true">          
+                                        </div>
+                                    </div>
+                                    <div class="form-group">        
+                                        <label class="control-label col-sm-4" for="select_option">Select Correct Option :</label>
+                                        <div class="col-sm-8">
+                                            <select class="form-control" ng-model="selected_question.selected" ng-options="item.text for item in selected_question.possible_answers"></select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">        
+                                        <div class="col-sm-offset-5 col-sm-4">                                          
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <button type="submit" class="btn btn-primary">SUBMIT QUIZ</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                            </div>
+                        </div>
+                    
+                    </div>
+                </div>
+                
+                <!-- END NEW QUIZ MODAL -->
+
                 
                 <!-- View Modal -->
                 <div class="modal fade" id="viewModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

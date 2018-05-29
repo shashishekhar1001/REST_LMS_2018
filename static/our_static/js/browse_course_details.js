@@ -14,6 +14,7 @@ app.controller('myCtrl', function($scope, $http, $q) {
 	$scope.form_info = {};
 	
 	var course_id = document.getElementById("course_id").innerHTML;
+	$scope.learner_id = document.getElementById("learner_id").innerHTML;
 	var url = "/api/registration_courses/";
 	var query_string = url + course_id + "/";
 
@@ -23,7 +24,6 @@ app.controller('myCtrl', function($scope, $http, $q) {
 	function successCallback(response){
 		$scope.course = response.data;
 		$scope.modules = $scope.course.modules;
-		console.log($scope.modules)
 	};
 	function errorCallback(error){
 		alert("Error Loading Page!");
@@ -62,7 +62,54 @@ app.controller('myCtrl', function($scope, $http, $q) {
 	};
 
 	$scope.take_quiz = function(object){
-		console.log(object.quiz[0]);
-		console.log(object.quiz[0].questions[0]);
+		$scope.quiz_name = object.quiz[0].quiz_name;
+		$scope.questions = object.quiz[0].questions;
+		$scope.selected_question = object.quiz[0].questions[0];
+		// console.log($scope.selected_question);
+	};
+
+	$scope.select_question = function(question){
+		$scope.selected_question = question;
+	};
+
+	$scope.submit_quiz = function(){
+		for(i=0; i < $scope.questions.length; i++){
+			// If the user has selected an option
+			if($scope.questions[i].selected !== null){
+				var url = "/api/learner_qa/";
+				var data= {
+					"quiz_question": $scope.questions[i].url,
+					"learner": "/api/registration_learners/" + $scope.learner_id + "/",
+					"chosen_option": $scope.questions[i].selected.url
+				};
+				console.log(data);
+				$http.post(url, data).then(successCallback, errorCallback);			
+				function successCallback(response){
+					swal("Good job!", "New module uploaded!", "success");
+				};
+				function errorCallback(error){
+					console.log(error);
+					swal("Oops!", "Something went wrong!", "error");			
+				};	
+			};
+			// If the user has not selected an option then pass in the dummy answer with text "No Option Selected". Make sure to create one and pass it's id
+			if($scope.questions[i].selected === null){
+				var url = "/api/learner_qa/";
+				var data= {
+					"quiz_question": $scope.questions[i].url,
+					"learner": "/api/registration_learners/" + $scope.learner_id + "/",
+					"chosen_option": $scope.questions[i].selected.url
+				};
+				console.log(data);
+				$http.post(url, data).then(successCallback, errorCallback);			
+				function successCallback(response){
+					swal("Good job!", "New module uploaded!", "success");
+				};
+				function errorCallback(error){
+					console.log(error);
+					swal("Oops!", "Something went wrong!", "error");			
+				};	
+			};
+		};
 	};
 });

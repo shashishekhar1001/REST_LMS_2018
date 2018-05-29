@@ -349,6 +349,7 @@ def browse_courses(request):
 
 def browse_course_details(request, course_id=None):
     learner = False
+    learner_id = -1
     if request.user.is_authenticated():
         try:
             custom_user = Custom_User.objects.get(user = request.user)
@@ -367,8 +368,10 @@ def browse_course_details(request, course_id=None):
         try:
             print "Inside Try"
             student = Learner_Model.objects.get(user=custom_user)
+            learner_id = student.id
             print student
-        except:
+        except Exception as e:
+            print e
             print "2 or more students or not in Learner Model."
             student = None
         if student != None:
@@ -381,5 +384,5 @@ def browse_course_details(request, course_id=None):
             print allow_access
     else:
         allow_access = False   
-    context = {"course": course, "allow_access": allow_access, "modules": modules}
+    context = {"course": course, "allow_access": allow_access, "modules": modules, "learner_id": learner_id}
     return render(request, "browse_course_details.html", context)

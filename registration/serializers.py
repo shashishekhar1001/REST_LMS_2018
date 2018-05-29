@@ -155,9 +155,12 @@ class CourseSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class LearnerQuestionAnswerSerializer(serializers.HyperlinkedModelSerializer):
-    quiz_question = Quiz_QuestionSerializer()
-    learner = Learner_ModelSerializer()
-    chosen_option = Answer_OptionsSerializer()
     class Meta:
         model = LearnerQuestionAnswer
         fields = ('quiz_question', 'learner', 'chosen_option')
+
+    def to_representation(self, instance):
+        self.fields['quiz_question'] = Quiz_QuestionSerializer()
+        self.fields['learner'] = Learner_ModelSerializer()
+        self.fields['chosen_option'] = Answer_OptionsSerializer()
+        return super(LearnerQuestionAnswerSerializer, self).to_representation(instance)
