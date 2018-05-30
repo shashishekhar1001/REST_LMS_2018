@@ -85,7 +85,7 @@ app.controller('myCtrl', function($scope, $http, $q) {
 				console.log(data);
 				$http.post(url, data).then(successCallback, errorCallback);			
 				function successCallback(response){
-					swal("Good job!", "New module uploaded!", "success");
+					swal("Good job!", "Answer uploaded!", "success");
 				};
 				function errorCallback(error){
 					console.log(error);
@@ -98,12 +98,12 @@ app.controller('myCtrl', function($scope, $http, $q) {
 				var data= {
 					"quiz_question": $scope.questions[i].url,
 					"learner": "/api/registration_learners/" + $scope.learner_id + "/",
-					"chosen_option": $scope.questions[i].selected.url
+					"chosen_option": "/api/registration_answer_options/250/"
 				};
 				console.log(data);
 				$http.post(url, data).then(successCallback, errorCallback);			
 				function successCallback(response){
-					swal("Good job!", "New module uploaded!", "success");
+					swal("Good job!", "Answer uploaded!", "success");
 				};
 				function errorCallback(error){
 					console.log(error);
