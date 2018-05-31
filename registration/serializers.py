@@ -103,7 +103,7 @@ class QuizSerializer(serializers.HyperlinkedModelSerializer):
     questions = Quiz_QuestionSerializer(many=True)
     class Meta:
         model = Quiz
-        fields = ('url', 'quiz_name', 'module_referred', 'questions')
+        fields = ('url', 'id', 'quiz_name', 'module_referred', 'questions')
 
 
 class Course_ModuleSerializer(serializers.HyperlinkedModelSerializer):
@@ -156,7 +156,7 @@ class CourseSerializer(serializers.HyperlinkedModelSerializer):
 
 class LearnerQuestionAnswerSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = LearnerQuestionAnswer
+        model = LearnerQnA
         fields = ('quiz_question', 'learner', 'chosen_option')
 
     def to_representation(self, instance):

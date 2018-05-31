@@ -92,7 +92,7 @@ class PaginatedCourseViewSet(viewsets.ModelViewSet):
 
 # Learner QnA's API for POST
 class LearnerQuestionAnswerViewSet(viewsets.ModelViewSet):
-    queryset = LearnerQuestionAnswer.objects.all()
+    queryset = LearnerQnA.objects.all()
     serializer_class = LearnerQuestionAnswerSerializer
 
 
@@ -116,7 +116,7 @@ class LearnerQuestionAnswerList(viewsets.ModelViewSet):
                         quiz = get_object_or_404(Quiz, id=quiz_id)
                         if quiz:
                             print quiz
-                            return LearnerQuestionAnswer.objects.filter(quiz_question__quiz=quiz, learner=learner)                                            
+                            return LearnerQnA.objects.filter(quiz_question__quiz=quiz, learner=learner)                                            
                     except Exception as e:
                         print e
             except Exception as e:

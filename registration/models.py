@@ -172,7 +172,18 @@ class Learner_Model(models.Model):
 
 
 
-class LearnerQuestionAnswer(models.Model):
-    quiz_question = models.ForeignKey(Quiz_Question, on_delete=models.CASCADE)
-    learner = models.ForeignKey(Learner_Model, on_delete=models.CASCADE)
-    chosen_option = models.ForeignKey(Answer_Options, related_name="chosen_option", default=None, on_delete=models.CASCADE, blank=True, null=True)
+class LearnerQnA(models.Model):
+    quiz_question = models.ForeignKey(Quiz_Question)
+    learner = models.ForeignKey(Learner_Model)
+    chosen_option = models.ForeignKey(Answer_Options, related_name="chosen_option", default=None, blank=True, null=True)
+
+
+# def learner_qna_set(instance, filename):
+#     return '/'.join(['Quiz_Learner_QnA', instance.part_of.course_by.user.user.get_full_name(), instance.part_of.course_name, filename])
+
+# class StoreLearnerQnAJSON(models.Model):
+#     qna_json = models.FileField(   
+#         upload_to=learner_qna_set,
+#         blank=True,
+#         null=True
+#     )
