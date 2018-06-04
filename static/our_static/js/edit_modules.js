@@ -561,6 +561,7 @@ app.controller('myCtrl', function($scope, $http, $q) {
 
 	// QUIZ PART
 	$scope.quiz = function(object){
+		$scope.module = object;
 		if (object.quiz[0] !== undefined){
 			console.log("Quiz Present");
 			$scope.quiz_name = object.quiz[0].quiz_name;
@@ -690,6 +691,8 @@ app.controller('myCtrl', function($scope, $http, $q) {
 				$scope.selected_question.url = response.data.url;
 				console.log($scope.selected_question);				
 				$scope.questions.push($scope.selected_question);
+				console.log($scope.questions);
+				$scope.module.quiz[0].questions.push($scope.selected_question);
 				swal("Good job!", "Question Saved!", "success");
 			};
 			function errorCallback(error){

@@ -34,7 +34,7 @@
                         <div class="col-sm-1">
                             <h3> {{ $index + 1 }} </h3>
                         </div>
-                        <div class="col-sm-6">
+                        <div class="col-sm-5">
                             <h3> {{ each.name }} </h3>
                         </div>
                         <div class="col-sm-2">
@@ -42,9 +42,21 @@
                                 VIEW
                             </button>
                         </div>
-                        <div class="col-sm-2">
+                        <!-- Show Learner the Quiz He has not done -->
+                        <div class="col-sm-2" ng-hide="each.lq_exists || each.quiz[0] == undefined || each.quiz[0].questions.length == 0">
                             <button type="button" class="btn btn-info" data-toggle="modal" data-target="#quizModal" ng-click="take_quiz(each)">
                                 QUIZ
+                            </button>
+                        </div>
+                        <!-- Show learner the quiz he has answered -->
+                        <div class="col-sm-2" ng-show="each.lq_exists">
+                            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#learnerQuizModal" ng-click="show_taken_quiz(each)">
+                                QUIZ
+                            </button>
+                        </div>
+                        <div class="col-sm-2" ng-show="each.lq_exists">
+                            <button type="button" class="btn btn-warning">
+                                {{ each.percentage | number:0 }} %
                             </button>
                         </div>
                     </div>
@@ -122,6 +134,94 @@
                 </div>
                 
                 <!-- END NEW QUIZ MODAL -->
+
+
+                <!-- LEARNER QUIZ MODAL -->
+                <div id="learnerQuizModal" class="modal fade" role="dialog">
+                    <div class="modal-dialog">
+                    
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4>Quiz {{ quiz_name }}:- </h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">                                          
+                                    <div class="col-sm-1" ng-repeat="q in learner_quiz_questions track by $index" style="margin:3px;">
+                                        <span ng-if="q.quiz_question.correct.text !== q.chosen_option.text">
+                                            <button class='btn btn-danger' ng-click="select_answered_question(q)">{{ $index + 1 }}</button>
+                                        </span>
+                                        <span ng-if="q.quiz_question.correct.text === q.chosen_option.text">
+                                            <button class='btn btn-success' ng-click="select_answered_question(q)">{{ $index + 1 }}</button>
+                                        </span>
+                                    </div>
+                                </div>
+                                <hr>
+                                <form class="form-horizontal">
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-2" for="question">Question:</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control" id="question" placeholder="Enter question" name="question" ng-required="true" ng-model="selected_answered_question.quiz_question.text" ng-disabled="true">
+                                        </div>
+                                    </div>
+                                    <div class="form-group" ng-class="{'has-success has-feedback': selected_answered_question.quiz_question.possible_answers[0].text === selected_answered_question.quiz_question.correct.text}">        
+                                        <label class="control-label col-sm-3" for="option1">Option 1:</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" id="option1" placeholder="Enter Option" name="option1" ng-required="true" ng-model="selected_answered_question.quiz_question.possible_answers[0].text" ng-disabled="true">
+                                            <span class="glyphicon glyphicon-ok form-control-feedback" ng-show="selected_answered_question.quiz_question.possible_answers[0].text === selected_answered_question.quiz_question.correct.text"></span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" ng-class="{'has-success has-feedback': selected_answered_question.quiz_question.possible_answers[1].text === selected_answered_question.quiz_question.correct.text}">        
+                                        <label class="control-label col-sm-3" for="option2">Option 2:</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" id="option2" placeholder="Enter Option" name="option2" ng-required="true" ng-model="selected_answered_question.quiz_question.possible_answers[1].text" ng-disabled="true">
+                                            <span class="glyphicon glyphicon-ok form-control-feedback" ng-show="selected_answered_question.quiz_question.possible_answers[1].text === selected_answered_question.quiz_question.correct.text"></span>                                            
+                                        </div>
+                                    </div>
+                                    <div class="form-group" ng-class="{'has-success has-feedback': selected_answered_question.quiz_question.possible_answers[2].text === selected_answered_question.quiz_question.correct.text}">        
+                                        <label class="control-label col-sm-3" for="option3">Option 3:</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" id="option3" placeholder="Enter Option" name="option3" ng-required="true" ng-model="selected_answered_question.quiz_question.possible_answers[2].text" ng-disabled="true">       
+                                            <span class="glyphicon glyphicon-ok form-control-feedback" ng-show="selected_answered_question.quiz_question.possible_answers[2].text === selected_answered_question.quiz_question.correct.text"></span>                                            
+                                        </div>
+                                    </div>
+                                    <div class="form-group" ng-class="{'has-success has-feedback': selected_answered_question.quiz_question.possible_answers[3].text === selected_answered_question.quiz_question.correct.text}">        
+                                        <label class="control-label col-sm-3" for="option4">Option 4:</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" id="option4" placeholder="Enter Option" name="option4" ng-required="true" ng-model="selected_answered_question.quiz_question.possible_answers[3].text" ng-disabled="true">    
+                                            <span class="glyphicon glyphicon-ok form-control-feedback" ng-show="selected_answered_question.quiz_question.possible_answers[3].text === selected_answered_question.quiz_question.correct.text"></span>                                                  
+                                        </div>
+                                    </div>
+                                    <div class="form-group">        
+                                        <label class="control-label col-sm-4" for="select_option">Your Answer :</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" id="select_option" placeholder="Enter Option" name="select_option" ng-required="true" ng-model="selected_answered_question.chosen_option.text" ng-disabled="true">     
+                                        </div>
+                                    </div>
+                                    <div class="form-group">        
+                                        <label class="control-label col-sm-4" for="correct_option">Correct Answer :</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" id="correct_option" placeholder="Enter Option" name="correct_option" ng-required="true" ng-model="selected_answered_question.quiz_question.correct.text" ng-disabled="true">     
+                                        </div>
+                                    </div>
+                                    <!-- <div class="form-group">        
+                                        <div class="col-sm-offset-5 col-sm-4">                                          
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <button type="submit" class="btn btn-primary">RETAKE QUIZ</button>
+                                        </div>
+                                    </div> -->
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                            </div>
+                        </div>
+                    
+                    </div>
+                </div>
+                
+                <!-- END LEARNER QUIZ MODAL -->
 
                 
                 <!-- View Modal -->
