@@ -186,7 +186,8 @@ app.controller('myCtrl', function($scope, $http, $q) {
 							console.log(i);
 							console.log(($scope.questions.length - 1));
 							console.log("Now Calculate the score");
-							$scope.module_wise_calculate_score();									
+							$scope.module_wise_calculate_score();
+							$('#quizModal').modal('hide');									
 						};
 					};
 				};

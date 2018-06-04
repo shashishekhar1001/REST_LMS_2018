@@ -545,6 +545,7 @@ app.controller('myCtrl', function($scope, $http, $q) {
 				$scope.modules.push($scope.new_module);			
 				$scope.addmodule_progressBar = $scope.addmodule_progressBar + 5;	
 				$scope.show_add_progrsess_bar = false;
+				$('#addModal').modal('hide');
 			};
 		};
 		function errorCallback(error){
