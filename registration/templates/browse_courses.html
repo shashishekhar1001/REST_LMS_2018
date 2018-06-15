@@ -22,10 +22,40 @@
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     
 </head>
-<body>
+<body ng-app="browse_courses" ng-controller="myCtrl">
     {% verbatim %}    
-    <!-- <div class="container" ng-app="browse_courses" ng-controller="myCtrl" infinite-scroll="load_more()" infinite-scroll-distance="2" infinite-scroll-disabled='scrollable'> -->
-    <div class="container" ng-app="browse_courses" ng-controller="myCtrl">
+    <!-- Navbar -->
+    <nav class="navbar navbar-default navbar-static-top">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+          </div>
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+              <li><a>Browse Courses</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+              <li>
+                <a href="/">
+                    <span class="glyphicon glyphicon-shopping-cart"></span>
+                    <span class="badge">{{ cart.length }}</span/>
+                </a>
+              </li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+    </nav>
+    <!-- Navbar End -->
+
+    
+
+    <!-- Container -->
+    <div class="container">
         <h1>Browse All Courses:-</h1>
         <hr>
         <div class="row">
@@ -38,15 +68,15 @@
                         <ng-rate-it ng-model="course.rating" read-only="true"></ng-rate-it>
                         {{course.rating}} Stars |
                         ({{ course.no_of_ratings }}) Ratings
-                        <a class="btn btn-warning" style="width: 100%;" href="/authentication/browse_course_details/{{ course.id }}">View</a>                                                
-                        <!-- <a href="#" class="btn btn-primary" style="width: 100%;" data-toggle="modal" data-target="#myModal" ng-click="select_course(course)">View</a> -->
+                        <!-- <a class="btn btn-warning" style="width: 100%;" href="/authentication/browse_course_details/{{ course.id }}">View</a>                                                 -->
+                        <a href="#" class="btn btn-primary" style="width: 100%;" data-toggle="modal" data-target="#myModal" ng-click="select_course(course)">View</a>
                     </div>
                 </div>
             </div>
         </div>
         <hr>
         <!-- Modal -->
-        <!-- <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal fade" id="myModal" role="dialog">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -99,14 +129,18 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <a class="btn btn-warning" href="/authentication/browse_course_details/{{ selected_course.id }}">Subscribe</a>                        
+                        <!-- <a class="btn btn-warning" href="/authentication/browse_course_details/{{ selected_course.id }}">Subscribe</a>                         -->
                         <button type="button" class="btn btn-primary" ng-click="show_modules()">Overview</button>                        
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>                        
+                        <button type="button" class="btn btn-info" ng-click="add_to_cart()" ng-if="selected_course.added_to_cart === false || selected_course.added_to_cart === undefined">
+                            <span class="glyphicon glyphicon-shopping-cart"></span> Add to Cart
+                        </button>           
                     </div>
                 </div>
             </div>
-        </div>         -->
+        </div>
+        <!-- End Modal -->
     </div>
+    <!-- End Container -->
     {% endverbatim %}       
 </body> 
 </html>

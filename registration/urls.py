@@ -14,4 +14,7 @@ urlpatterns = [
     url(r'^edit_course_details/(?P<course_id>\d+)', 'registration.views.edit_course_details', name='edit_course_details'),    
     url(r'^browse_courses/', 'registration.views.browse_courses', name='browse_courses'),   
     url(r'^browse_course_details/(?P<course_id>\d+)', 'registration.views.browse_course_details', name='browse_course_details'),         
+    url(r'^update_cart_session/', 'registration.views.update_cart_session', name='update_cart_session'),         
+    url(r'^checkout/', 'registration.views.checkout', name='checkout'),         
+    url(r'^checkout_error/', 'registration.views.checkout_error', name='checkout_error'),         
 ]

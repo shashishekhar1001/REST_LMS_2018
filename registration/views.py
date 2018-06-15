@@ -3,7 +3,7 @@ from .forms import *
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from .models import *
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.sites.shortcuts import get_current_site
 from django.conf import settings
 from django.core import signing
@@ -15,7 +15,7 @@ from django.contrib import messages
 from django import forms
 from django.contrib.auth.decorators import login_required
 from django.forms.models import model_to_dict
-
+import json
 
 def custom_user_creation(request):
     current_site = str(get_current_site(request))
@@ -143,6 +143,8 @@ def my_login(request):
                         return HttpResponseRedirect("/trainer_dashboard/")
                     if str(custom_user.primary_registration_type) == "Learner":
                         print "Login as a Learner." 
+                        if next:
+                            return HttpResponseRedirect(next) 
                         return HttpResponseRedirect("/learner_dashboard/")
                     if str(custom_user.primary_registration_type) == "Vendor":
                         print "Login as a Vendor." 
@@ -386,3 +388,35 @@ def browse_course_details(request, course_id=None):
         allow_access = False   
     context = {"course": course, "allow_access": allow_access, "modules": modules, "learner_id": learner_id}
     return render(request, "browse_course_details.html", context)
+
+
+def update_cart_session(request):
+    if request.method == 'POST':
+        cart = json.loads(request.body)
+        request.session['cart'] = cart["cart"]
+        print request.session['cart']
+        return HttpResponse('OK')
+    else:
+        return HttpResponse("Not a POST Method")
+
+
+@login_required(login_url='/authentication/login/', redirect_field_name='next')
+def checkout(request):
+    print "Checkout"
+    if request.user.is_authenticated():
+        try:
+            custom_user = Custom_User.objects.get(user = request.user)
+            print custom_user
+            if str(custom_user.primary_registration_type) == "Learner":
+                print "Learner"
+                cart = request.session['cart']
+                return render(request, "checkout.html", {"cart": cart})
+        except:
+            return HttpResponseRedirect('/authentication/checkout_error/')
+    return HttpResponseRedirect('/authentication/checkout_error/')
+    
+
+    
+@login_required(login_url='/authentication/login/', redirect_field_name='next')
+def checkout_error(request):
+    return render(request, "checkout_error.html", {})    

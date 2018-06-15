@@ -10,6 +10,8 @@ app.config(function($httpProvider) {
 });
 
 app.controller('myCtrl', function($scope, $http, $q) {
+
+	$scope.cart = [];
 	
 	$scope.courses = {};
 	var url = "/api/paginated_courses/";
@@ -69,4 +71,23 @@ app.controller('myCtrl', function($scope, $http, $q) {
 		$scope.modules_visible = false;
 	})
 	// END HIDE MODULES ON MODAL CLOSE
+
+	$scope.add_to_cart = function(){
+		$scope.selected_course.added_to_cart = true;
+		$scope.cart.push($scope.selected_course);
+		console.log($scope.cart);
+		// POST
+		var url = "/authentication/update_cart_session/";
+		var data= {
+			"cart": $scope.cart
+		};
+		$http.post(url, data).then(successCallback, errorCallback);			
+		function successCallback(response){
+			console.log(response);
+		};
+		function errorCallback(error){
+			console.log(error);
+			swal("Oops!", "Check your internet connection!", "error");			
+		};
+	};
 });

@@ -178,12 +178,8 @@ class LearnerQnA(models.Model):
     chosen_option = models.ForeignKey(Answer_Options, related_name="chosen_option", default=None, blank=True, null=True)
 
 
-# def learner_qna_set(instance, filename):
-#     return '/'.join(['Quiz_Learner_QnA', instance.part_of.course_by.user.user.get_full_name(), instance.part_of.course_name, filename])
-
-# class StoreLearnerQnAJSON(models.Model):
-#     qna_json = models.FileField(   
-#         upload_to=learner_qna_set,
-#         blank=True,
-#         null=True
-#     )
+class Subscription(models.Model):
+    learner = models.ForeignKey(Learner_Model)
+    course = models.ForeignKey(Course)
+    start_date = models.DateTimeField(auto_now_add = True, auto_now = False)
+    end_date = models.DateTimeField()
