@@ -71,7 +71,7 @@ class Quiz_QuestionSerializer(serializers.HyperlinkedModelSerializer):
         instance.order = validated_data.get('order', instance.order)
         try:
             correct_answer = validated_data.pop('correct')
-            print correct_answer
+            print(correct_answer)
             if correct_answer:
                 correct_answer, created  = Answer_Options.objects.get_or_create(text=correct_answer['text'])
                 instance.correct = correct_answer
@@ -79,12 +79,12 @@ class Quiz_QuestionSerializer(serializers.HyperlinkedModelSerializer):
             pass
         try:
             selected_answer = validated_data.pop('selected')
-            print selected_answer
+            print(selected_answer)
         except:
             pass
         try:
             possible_answers = validated_data.pop('possible_answers')
-            print possible_answers
+            print(possible_answers)
             if possible_answers:
                 possible_answers_list = []
                 for pa in possible_answers:
@@ -93,7 +93,7 @@ class Quiz_QuestionSerializer(serializers.HyperlinkedModelSerializer):
                 instance.possible_answers = possible_answers_list
         except:
             pass
-        print instance
+        print(instance)
         instance.save()
         return instance 
 

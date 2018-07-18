@@ -103,25 +103,25 @@ class LearnerQuestionAnswerList(viewsets.ModelViewSet):
     def get_queryset(self):
         if self.request.user.is_authenticated():
             try:
-                print "Inside Queryset"
+                print("Inside Queryset")
                 custom_user = Custom_User.objects.get(user = self.request.user)
-                print custom_user
+                print(custom_user)
                 if str(custom_user.primary_registration_type) == "Learner":
-                    print "Learner"
+                    print("Learner")
                     learner = Learner_Model.objects.get(user=custom_user)
-                    print learner
+                    print(learner)
                     try:
                         quiz_id = self.kwargs['quiz_id']
-                        print quiz_id
+                        print(quiz_id)
                         quiz = get_object_or_404(Quiz, id=quiz_id)
                         if quiz:
-                            print quiz
+                            print(quiz)
                             return LearnerQnA.objects.filter(quiz_question__quiz=quiz, learner=learner)                                            
                     except Exception as e:
-                        print e
+                        print(e)
             except Exception as e:
-                print e
-                print "Not a Learner or an unauthorized user or not a subscribed person."
+                print(e)                
+                print("Not a Learner or an unauthorized user or not a subscribed person.")
                 pass
         else:
             pass

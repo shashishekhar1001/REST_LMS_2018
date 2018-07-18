@@ -41,11 +41,8 @@ def create_blog(request):
     user = request.user
     custom_user = get_object_or_404(Custom_User, user=user)
     if request.method == "POST":
-        print request.POST
         form = CreateBlogForm(request.POST, request.FILES or None)
         if form.is_valid():
-            print "\n" * 10
-            print "is valid"
             instance = form
             title = instance.cleaned_data.get('title')
             image = instance.cleaned_data.get('image')
@@ -79,38 +76,17 @@ def update_blog(request, id=None):
         form = CreateBlogForm(request.POST, request.FILES or None)
         if form.is_valid():
             instance = form
-            print "\n" * 10
-            print blog.image
-            print instance.cleaned_data.get('image')
             if (blog.image == "" and instance.cleaned_data.get('image') == None):
-                print "IF"
-                print blog.image
-                print instance.cleaned_data.get('image')
                 blog.image = blog.image
             elif (blog.image != "" and instance.cleaned_data.get('image') == None):
-                print "ELIF"
-                print blog.image
-                print instance.cleaned_data.get('image')
                 blog.image = blog.image
             elif (blog.image != "" and instance.cleaned_data.get('image') != None):
-                print "2nd ELIF"
-                print blog.image
-                print instance.cleaned_data.get('image')
                 blog.image = instance.cleaned_data.get('image')
             elif (blog.image == "" and instance.cleaned_data.get('image') != None):
-                print "3rd ELIF"
-                print blog.image
-                print instance.cleaned_data.get('image')
                 blog.image = instance.cleaned_data.get('image')
             elif (blog.image == False):
-                print "4th ELIF"
-                print blog.image
-                print instance.cleaned_data.get('image')
                 blog.image = ""
             else:
-                print "ELSE"
-                print blog.image
-                print instance.cleaned_data.get('image')
                 blog.image = blog.image
             blog.title = instance.cleaned_data.get('title')
             blog.content = instance.cleaned_data.get('content')

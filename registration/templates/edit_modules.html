@@ -13,7 +13,8 @@
     <script src="{% static 'js/angular.min.js' %}"></script>    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js"></script>
     <script src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>      
-    <script src="{% static 'js/sortable.js' %}"></script>            
+    <script src="{% static 'js/sortable.js' %}"></script>          
+    <script src="http://cdn.jsdelivr.net/npm/afterglowplayer@1.x"></script>  
 </head>
 <body>
      <div class="container" ng-app="edit_modules" ng-controller="myCtrl">   
@@ -411,6 +412,12 @@
                 <!-- End Edit Modal -->
             {% endverbatim %}
             <br>            
+        </div>
+        <div class="col-md-3">  
+            <a href="#myvideo" class="afterglow btn btn-primary"><i class="far fa-play-circle"></i> Video</a>
+            <video id="myvideo" width="960" height="540" data-overscale="false" class="afterglow-lightboxplayer" data-autoresize="fit" data-skin="dark">
+            <source type="video/mp4" src="http://localhost:8080/media/Videos/Shashishekhar%20Hasabnis/Django/Creating%20Paypal%20Express%20Payments%20in%20a%20Flask%20App.mp4" />
+            </video>
         </div>        
     </div>
     <script src="{% static 'js/edit_modules.js' %}"></script>

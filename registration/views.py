@@ -47,11 +47,8 @@ def custom_user_creation(request):
             u.save()
             # Save the Custom User Model
             custom_user = Custom_User.objects.create(user=u, mobile=mobile, primary_registration_type=register_as)
-            custom_user.save()                        
-            print "\n"*20
-            print custom_user.primary_registration_type
-            print "\n"*20
-            print type(custom_user.primary_registration_type) 
+            custom_user.save()
+            print(custom_user.primary_registration_type) 
             if str(custom_user.primary_registration_type) == "Trainer":
                 new_trainer = Trainer_Model.objects.create(user=custom_user)
                 new_trainer.save()          
@@ -75,36 +72,21 @@ def custom_user_creation(request):
 
 
 def activate_user(request):
-    print "\n"*20
-    print "Activating...."
     salt = settings.SECRET_KEY
     ak = request.GET.get('ak')
     # Change below line max_age according to your settings.py file
     decrypt = signing.loads(ak, salt)
-    print "\n" * 20
-    print decrypt
     u = User.objects.get(email=decrypt)
-    print "\n" * 20    
-    print type(u)
     try:
-        print "Inside Try"
-        print u
-        if u.is_active == False:       
-            print "Inside Try > IF" 
+        if u.is_active == False:    
             u.is_active = True
-            print "User set to active"
             u.save()
-            print "User Saved"
             return HttpResponseRedirect('/accounts/activate/complete/')
             # return render(request, "activation_successful.html", {})
-            print "after return"
         else:
-            print "Inside Else"
             return HttpResponseRedirect('/authentication/activated_already')
             # return render(request, "already_activated.html", {})
-            print "after else return"
     except:
-        print "Inside except"
         return render(request, "activation_failed.html", {})
 
 
@@ -112,11 +94,11 @@ def my_login(request):
     try:
         next = request.GET.get('next')
         if next:
-            print next
+            print(next)
         else:
-            print "no next" 
+            print("no next") 
     except Exception as e:
-        print e
+        print(e)
     form = LoginForm(request.POST or None)
     context ={"form":form}
     if form.is_valid():
@@ -137,27 +119,22 @@ def my_login(request):
                     return HttpResponseRedirect("/")
                 if custom_user is not None:
                     if str(custom_user.primary_registration_type) == "Trainer":
-                        print "Login as a Trainer."
                         if next:
                             return HttpResponseRedirect(next) 
                         return HttpResponseRedirect("/trainer_dashboard/")
                     if str(custom_user.primary_registration_type) == "Learner":
-                        print "Login as a Learner." 
                         if next:
                             return HttpResponseRedirect(next) 
                         return HttpResponseRedirect("/learner_dashboard/")
                     if str(custom_user.primary_registration_type) == "Vendor":
-                        print "Login as a Vendor." 
                         if next:
                             return HttpResponseRedirect(next)
                         return HttpResponseRedirect("/vendor_dashboard/")
                     if str(custom_user.primary_registration_type) == "Job Seeker":
-                        print "Login as a Job Seeker." 
                         if next:
                             return HttpResponseRedirect(next)
                         return HttpResponseRedirect("/job_seeker_dashboard/")
                     if str(custom_user.primary_registration_type) == "Client":
-                        print "Login as a Client." 
                         if next:
                             return HttpResponseRedirect(next)
                         return HttpResponseRedirect("/client_dashboard/")
@@ -179,14 +156,9 @@ def trainer_update_profile(request):
     user = request.user
     if user.is_active == False:
         return HttpResponseRedirect('/activation_pending/')
-    print user
     cu = Custom_User.objects.get(user=user)
-    print cu
-    print cu.primary_registration_type
     if cu.primary_registration_type == "Trainer":
-        print "True"
         trainer = Trainer_Model.objects.get(user=cu)
-        print trainer
         form = UpdateTrainerProfileForm(request.POST, request.FILES or None)
         context = {"form": form}
         if form.is_valid():
@@ -355,35 +327,23 @@ def browse_course_details(request, course_id=None):
     if request.user.is_authenticated():
         try:
             custom_user = Custom_User.objects.get(user = request.user)
-            print custom_user
             if str(custom_user.primary_registration_type) == "Learner":
-                print "Learner"
                 learner = True
         except:
             pass
     course = get_object_or_404(Course, id=course_id)
     modules = course.modules.all().order_by('order')
-    print modules
     if learner == True:
-        print "Search for subscribed courses."
-        print course.course_name
         try:
-            print "Inside Try"
             student = Learner_Model.objects.get(user=custom_user)
             learner_id = student.id
-            print student
         except Exception as e:
-            print e
-            print "2 or more students or not in Learner Model."
             student = None
         if student != None:
             if course in student.courses_subscribed.all():
-                print "Allow access to the course content"
                 allow_access = True
-                print allow_access
         else:
             allow_access = False
-            print allow_access
     else:
         allow_access = False   
     context = {"course": course, "allow_access": allow_access, "modules": modules, "learner_id": learner_id}
@@ -394,7 +354,7 @@ def update_cart_session(request):
     if request.method == 'POST':
         cart = json.loads(request.body)
         request.session['cart'] = cart["cart"]
-        print request.session['cart']
+        print(request.session['cart'])
         return HttpResponse('OK')
     else:
         return HttpResponse("Not a POST Method")
@@ -402,13 +362,10 @@ def update_cart_session(request):
 
 @login_required(login_url='/authentication/login/', redirect_field_name='next')
 def checkout(request):
-    print "Checkout"
     if request.user.is_authenticated():
         try:
             custom_user = Custom_User.objects.get(user = request.user)
-            print custom_user
             if str(custom_user.primary_registration_type) == "Learner":
-                print "Learner"
                 cart = request.session['cart']
                 return render(request, "checkout.html", {"cart": cart})
         except:
