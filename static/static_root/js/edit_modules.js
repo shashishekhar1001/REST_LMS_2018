@@ -23,6 +23,7 @@ app.controller('myCtrl', function($scope, $http, $q) {
 	function successCallback(response){
 		$scope.course = response.data;
 		$scope.modules = $scope.course.modules;
+		console.log($scope.modules);
 		$scope.sortableOptions = {
 			stop: function(e, ui) {
 				$scope.update_order(); 
@@ -98,6 +99,12 @@ app.controller('myCtrl', function($scope, $http, $q) {
 		catch(err){
 			$scope.selected.video_name = "No File!";
 		};
+		try{
+			$scope.selected.reference_name = unescape($scope.selected.Refernce.split('/').pop());
+		}
+		catch(err){
+			$scope.selected.reference_name = "No File!";
+		};
 	};
 
 	$scope.edit_module = function(object, index){
@@ -122,6 +129,14 @@ app.controller('myCtrl', function($scope, $http, $q) {
 		}
 		catch(err){
 			$scope.selected.video_name = "No File!";
+		};
+		try{
+			$scope.selected.reference_name = unescape($scope.selected.Refernce.split('/').pop());
+			console.log($scope.selected.Refernce);
+			console.log($scope.selected.reference_name);
+		}
+		catch(err){
+			$scope.selected.reference_name = "No File!";
 		};
 		// POPULATE FORM DATA
 		$scope.form_info = $scope.selected;
@@ -298,6 +313,77 @@ app.controller('myCtrl', function($scope, $http, $q) {
 	};
 
 
+	// Refernce Upload Part
+	$scope.ref_upload = function(){
+		var file_selected = false;		
+		var element = document.getElementById("ref");
+		if (element.files[0] === undefined){
+			swal("No File Chosen!", "Please select a file to be uploaded!", "error");
+		}
+		else{
+			file_selected = true;
+		};
+		if (file_selected === true){
+		    $scope.show_ref_progrsess_bar = true;			
+			var url = $scope.selected.url;
+			var fd = new FormData();
+			var canceller = $q.defer();
+			$scope.ref_cancel = function(){
+				swal({
+					title: "Are you sure?",
+					text: "Once aborted, you will not be able to resume!",
+					icon: "warning",
+					buttons: true,
+					dangerMode: true,
+				  })
+				  .then((willDelete) => {
+					if (willDelete) {
+					  swal("Resuming file upload.", {
+						icon: "success",
+					  });
+					} else {
+					  swal("Upload Cancelled!");
+					  canceller.resolve();
+					}
+				  });			
+			};
+			fd.append('Refernce', element.files[0]);
+			$http.patch(url, fd, {
+				transformRequest: angular.identity,
+				headers: {'Content-Type': undefined},
+				uploadEventHandlers: {
+					progress: function (e) {
+							  if (e.lengthComputable) {
+								$scope.refprogressBar = Math.floor((e.loaded / e.total) * 95);
+							  }
+					}
+				},
+				timeout: canceller.promise
+			}).then(successCallback, errorCallback);
+			function successCallback(response){
+				if (response.status === 200){
+					$scope.selected.Refernce = response.data.Refernce;
+					$scope.selected.reference_name = $scope.selected.Refernce.split('/').pop();
+					$scope.selected.reference_name = unescape($scope.selected.reference_name);
+					$scope.refprogressBar = $scope.refprogressBar + 5;
+					$scope.show_ref_progrsess_bar = false;
+					swal("Good job!", "Your file is uploaded!", "success");
+				}
+			};
+			function errorCallback(error){
+				if (error.status === -1){
+					swal("Aborted!", "File Uploaded Was Aborted!", "error");									
+				}
+				else{
+					swal("Oops!", "Something went wrong....!", "error");									
+				}
+				$scope.show_ref_progrsess_bar = false;
+			};
+		};
+	};
+
+
+
 	//Presentation Upload Part
 	$scope.presentation_upload = function(){
 		var file_selected = false;		
@@ -381,6 +467,7 @@ app.controller('myCtrl', function($scope, $http, $q) {
 		$scope.vdo_element = document.getElementById("new_vdo");
 		$scope.pres_element = document.getElementById("new_pres");
 		$scope.ass_element = document.getElementById("new_ass");
+		$scope.ref_element = document.getElementById("new_ref");
 
 		$scope.fd = new FormData();	
 		$scope.show_addmodule_progrsess_bar = true;
@@ -402,6 +489,12 @@ app.controller('myCtrl', function($scope, $http, $q) {
 		}
 		else{
 			$scope.fd.append('Presentation', $scope.pres_element.files[0]);	
+		};
+
+		if ($scope.ref_element.files[0] === undefined){
+		}
+		else{
+			$scope.fd.append('Refernce', $scope.ref_element.files[0]);	
 		};
 
 		$scope.fd.append('name', $scope.new_module_name);
@@ -452,6 +545,7 @@ app.controller('myCtrl', function($scope, $http, $q) {
 				$scope.modules.push($scope.new_module);			
 				$scope.addmodule_progressBar = $scope.addmodule_progressBar + 5;	
 				$scope.show_add_progrsess_bar = false;
+				$('#addModal').modal('hide');
 			};
 		};
 		function errorCallback(error){
@@ -468,6 +562,7 @@ app.controller('myCtrl', function($scope, $http, $q) {
 
 	// QUIZ PART
 	$scope.quiz = function(object){
+		$scope.module = object;
 		if (object.quiz[0] !== undefined){
 			console.log("Quiz Present");
 			$scope.quiz_name = object.quiz[0].quiz_name;
@@ -597,6 +692,8 @@ app.controller('myCtrl', function($scope, $http, $q) {
 				$scope.selected_question.url = response.data.url;
 				console.log($scope.selected_question);				
 				$scope.questions.push($scope.selected_question);
+				console.log($scope.questions);
+				$scope.module.quiz[0].questions.push($scope.selected_question);
 				swal("Good job!", "Question Saved!", "success");
 			};
 			function errorCallback(error){
@@ -655,6 +752,10 @@ app.controller('myCtrl', function($scope, $http, $q) {
 				$scope.questions.splice( $scope.questions.indexOf($scope.selected_question), 1 );
 				console.log($scope.questions.length);
 				$scope.selected_question = $scope.questions[index];
+				$scope.selected_question.option_1 = $scope.questions[index].possible_answers[0];
+				$scope.selected_question.option_2 = $scope.questions[index].possible_answers[1];
+				$scope.selected_question.option_3 = $scope.questions[index].possible_answers[2];
+				$scope.selected_question.option_4 = $scope.questions[index].possible_answers[3];
 			};
 			function errorCallback(error){
 				swal("Deleting Cancelled!");					

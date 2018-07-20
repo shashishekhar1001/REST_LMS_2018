@@ -355,20 +355,25 @@ def update_cart_session(request):
         cart = json.loads(request.body)
         request.session['cart'] = cart["cart"]
         print(request.session['cart'])
+        print("Added to cart successfully")
         return HttpResponse('OK')
     else:
+        print("POST request not completed.")
         return HttpResponse("Not a POST Method")
 
 
 @login_required(login_url='/authentication/login/', redirect_field_name='next')
 def checkout(request):
     if request.user.is_authenticated():
+        print("Authenticated")
         try:
             custom_user = Custom_User.objects.get(user = request.user)
             if str(custom_user.primary_registration_type) == "Learner":
+                print("Learner")
                 cart = request.session['cart']
                 return render(request, "checkout.html", {"cart": cart})
-        except:
+        except Exception as e:
+            print(e)
             return HttpResponseRedirect('/authentication/checkout_error/')
     return HttpResponseRedirect('/authentication/checkout_error/')
     

@@ -20,7 +20,9 @@
     
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>     
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-    
+    <script>
+        window.csrf_token = "{{ csrf_token }}";
+    </script>
 </head>
 <body ng-app="browse_courses" ng-controller="myCtrl">
     {% verbatim %}    
