@@ -16,6 +16,8 @@ from django import forms
 from django.contrib.auth.decorators import login_required
 from django.forms.models import model_to_dict
 import json
+from django.views.decorators.csrf import csrf_exempt
+
 
 def custom_user_creation(request):
     current_site = str(get_current_site(request))
@@ -382,3 +384,24 @@ def checkout(request):
 @login_required(login_url='/authentication/login/', redirect_field_name='next')
 def checkout_error(request):
     return render(request, "checkout_error.html", {})    
+
+
+
+@login_required(login_url='/authentication/login/', redirect_field_name='next')
+def give_course_access(request):
+    if request.user.is_authenticated():
+        print("Authenticated")
+        try:
+            custom_user = Custom_User.objects.get(user = request.user)
+            if str(custom_user.primary_registration_type) == "Learner":
+                print("Learner")
+                cart = request.session['cart']
+                for course in cart:
+                    print(course.course_id)
+                    print(course.course_name)
+            return HttpResponse('OK')            
+        except Exception as e:
+            print(e)
+            return HttpResponse(e)
+    return HttpResponse('Not an autheticated User Error.')
+    

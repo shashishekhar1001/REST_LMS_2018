@@ -48,6 +48,8 @@ INSTALLED_APPS = (
     'blog_and_comments',
     'rest_framework',
     'django_cleanup',
+    'debug_toolbar',
+    'paypal.standard.ipn',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -59,6 +61,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
 
 ROOT_URLCONF = 'SRC.urls'
@@ -125,3 +128,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "static", "media_root")
 # Allauth Settings
 SITE_ID = 1
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
+
+# PAYPAL Settings
+
+PAYPAL_RECEIVER_EMAIL = 'shashishekhar1001@gmail.com'
+PAYPAL_TEST = True

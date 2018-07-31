@@ -59,7 +59,7 @@ class Course(models.Model):
             self.author = self.course_by.user.user.get_full_name()
         super(Course, self).save(*args, **kwargs)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.course_name + "  --By " + self.course_by.user.user.get_full_name()
     
 def content_videofile_name(instance, filename):
@@ -167,7 +167,7 @@ class Learner_Model(models.Model):
     courses_learning = models.TextField()
     courses_subscribed = models.ManyToManyField(Course, blank=True, null=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.user.user.email
 
 

@@ -15,35 +15,6 @@
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="https://www.paypalobjects.com/api/checkout.js"></script>
     <script src="{% static 'js/checkout.js' %}"></script>
-    <!-- <script>
-        paypal.Button.render({
-            env: 'sandbox',
-            // env: 'production',
-            client: {
-            sandbox: 'Afln2JlWLddwsD3r0vpqZbfe0J23yzIJ9u1uE2FkitbWz63NSdsOuYv5Le_G5BJS_kATV9U9wzWJwcqL',
-            production: 'Afz2dSzSuchdJWgK39Qbli8AeeXbwuvLmdcStXN_cY4oXLhxKCI5vWP2YEkh8oRIXYqP9CYjPl1SdXrn'
-            },
-            payment: function (data, actions) {
-            return actions.payment.create({
-                transactions: [{
-                amount: {
-                    total: '0.01',
-                    currency: 'USD'
-                }
-                }]
-            });
-            },
-            onAuthorize: function (data, actions) {
-            return actions.payment.execute()
-                .then(function () {
-                window.alert('Thank you for your purchase!');
-                });
-            }
-        }, '#paypal-button');
-    </script> -->
-    <script>
-        
-    </script>
 </head>
 <body>
     <h1 style="text-align: center;">ITEMS IN CART</h1>
