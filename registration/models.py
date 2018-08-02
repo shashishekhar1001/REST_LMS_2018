@@ -61,7 +61,14 @@ class Course(models.Model):
 
     def __str__(self):
         return self.course_name + "  --By " + self.course_by.user.user.get_full_name()
+
+    class Meta:
+        permissions = (
+            ('access_course', 'Access Course'),
+        )
     
+
+
 def content_videofile_name(instance, filename):
     return '/'.join(['Videos', instance.part_of.course_by.user.user.get_full_name(), instance.part_of.course_name, filename])
 
