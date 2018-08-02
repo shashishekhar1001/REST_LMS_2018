@@ -1,15 +1,19 @@
 from django.contrib import admin
 from .models import *
 # Register your models here.
+from guardian.admin import GuardedModelAdmin
 
-class Course_ModuleInline(admin.StackedInline):
-    model = Course_Module
+# class Course_ModuleInline(admin.StackedInline):
+#     model = Course_Module
 
-class CourseAdmin(admin.ModelAdmin):
-    inlines = [
-        Course_ModuleInline
-    ]
+# class CourseAdmin(admin.ModelAdmin):
+#     inlines = [
+#         Course_ModuleInline
+#     ]
 
+#     model = Course
+
+class CourseAdmin(GuardedModelAdmin):
     model = Course
 
 admin.site.register(Custom_User)

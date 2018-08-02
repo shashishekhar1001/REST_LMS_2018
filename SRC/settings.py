@@ -50,6 +50,7 @@ INSTALLED_APPS = (
     'django_cleanup',
     'debug_toolbar',
     'paypal.standard.ipn',
+    'guardian',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -95,6 +96,15 @@ DATABASES = {
     }
 }
 
+
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend', # this is default
+    'guardian.backends.ObjectPermissionBackend',
+)
+
+# GUARDIAN_RENDER_403 = True
+GUARDIAN_RAISE_403 = True
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
