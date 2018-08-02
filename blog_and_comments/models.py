@@ -15,7 +15,7 @@ class Blog(models.Model):
     created = models.DateTimeField(auto_now=False, auto_now_add=True)
     likes = models.ManyToManyField(Custom_User, related_name='blog_likes', blank=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.title
 
     def get_absolute_url(self):

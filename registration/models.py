@@ -21,7 +21,7 @@ class Custom_User(models.Model):
     tertiary_registration_type = models.CharField(max_length=15, choices=REGISTRATION_CHOICES, blank=True)    
     quaternary_registration_type = models.CharField(max_length=15, choices=REGISTRATION_CHOICES, blank=True)   
     
-    def __unicode__(self):
+    def __str__(self):
         return self.user.email
 
 class Trainer_Model(models.Model):
@@ -36,7 +36,7 @@ class Trainer_Model(models.Model):
     skills = models.TextField(blank=True)
     cv = models.FileField(upload_to='cvs/%Y/%m/%d/', blank=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.user.user.email
 
 
@@ -108,7 +108,7 @@ class Course_Module(models.Model):
 
     order = models.IntegerField(blank=True, null=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
 
@@ -116,14 +116,14 @@ class Topic(models.Model):
     part_of = models.ForeignKey(Course_Module)
     topic_name = models.CharField(max_length=200)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.topic_name
 
 
 class Answer_Options(models.Model):
     text = models.CharField(max_length=200)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.text
 
     class Meta:
@@ -135,7 +135,7 @@ class Quiz(models.Model):
     quiz_name = models.CharField(max_length=200)
     module_referred = models.ForeignKey(Course_Module, related_name="quiz")
 
-    def __unicode__(self):
+    def __str__(self):
         return self.quiz_name
 
     class Meta:
@@ -153,7 +153,7 @@ class Quiz_Question(models.Model):
     correct = models.ForeignKey(Answer_Options, related_name="correct", default=None, on_delete=models.CASCADE, blank=True, null=True)
     order = models.IntegerField(blank=True, null=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.text
 
     class Meta:
