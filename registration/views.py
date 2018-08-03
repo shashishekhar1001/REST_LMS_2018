@@ -323,14 +323,18 @@ def browse_courses(request):
     return render(request, "browse_courses.html", context)
 
 
+@login_required(login_url='/authentication/login/', redirect_field_name='next')
 def browse_course_details(request, course_id=None):
     learner = False
     learner_id = -1
+    allow_access = False
     if request.user.is_authenticated():
+        print("Authenticated")
         try:
             custom_user = Custom_User.objects.get(user = request.user)
             if str(custom_user.primary_registration_type) == "Learner":
                 learner = True
+                print("A Learner")
         except:
             pass
     course = get_object_or_404(Course, id=course_id)
@@ -339,14 +343,21 @@ def browse_course_details(request, course_id=None):
         try:
             student = Learner_Model.objects.get(user=custom_user)
             learner_id = student.id
+            print("Student")
         except Exception as e:
             student = None
+            print("Not a student.")
         if student != None:
             if course in student.courses_subscribed.all():
                 allow_access = True
+                print("Subscriber")
+            else:
+                print("Not a Subscriber")
+                allow_access = False
         else:
             allow_access = False
     else:
+        print("Not a Learner")
         allow_access = False   
     context = {"course": course, "allow_access": allow_access, "modules": modules, "learner_id": learner_id}
     return render(request, "browse_course_details.html", context)

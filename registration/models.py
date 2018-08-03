@@ -171,7 +171,7 @@ class Quiz_Question(models.Model):
 class Learner_Model(models.Model):
     user = models.ForeignKey(Custom_User, on_delete=models.CASCADE)
     profile_picture = models.ImageField(upload_to='profile_pics/%Y/%m/%d/', blank=True, null=True)
-    courses_learning = models.TextField()
+    # courses_learning = models.TextField()
     courses_subscribed = models.ManyToManyField(Course, blank=True, null=True)
 
     def __str__(self):
