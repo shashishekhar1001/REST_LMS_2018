@@ -110,10 +110,9 @@ class Course_Module(models.Model):
         blank=True,
         null=True
     )
-
     topics = models.TextField(blank=True, null=True)
-
     order = models.IntegerField(blank=True, null=True)
+    allow_preview = models.NullBooleanField(blank=True, null=True, default=False)
 
     def __str__(self):
         return self.name

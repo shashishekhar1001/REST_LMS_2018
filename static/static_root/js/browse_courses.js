@@ -3,6 +3,7 @@ var app = angular.module("browse_courses", ['ngRateIt', 'ngFitText', 'infinite-s
 app.config(function($httpProvider) {
 	$httpProvider.defaults.xsrfCookieName = 'csrftoken';
 	$httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
+	$httpProvider.defaults.headers.common["X-CSRFToken"] = window.csrf_token;
 	$httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 	$httpProvider.defaults.headers.common['Content-Type'] = 'application/json; charset=utf-8';
 	$httpProvider.defaults.useXDomain = true;
@@ -75,11 +76,12 @@ app.controller('myCtrl', function($scope, $http, $q) {
 	$scope.add_to_cart = function(){
 		$scope.selected_course.added_to_cart = true;
 		$scope.cart.push($scope.selected_course);
-		console.log($scope.cart);
+		$scope.json_cart = JSON.stringify($scope.cart);
+		console.log(typeof($scope.json_cart));
 		// POST
 		var url = "/authentication/update_cart_session/";
 		var data= {
-			"cart": $scope.cart
+			"cart": $scope.json_cart
 		};
 		$http.post(url, data).then(successCallback, errorCallback);			
 		function successCallback(response){

@@ -111,7 +111,7 @@ class Course_ModuleSerializer(serializers.HyperlinkedModelSerializer):
     quiz = QuizSerializer(many=True, required=False)
     class Meta:
         model = Course_Module
-        fields = ('id', 'url', 'part_of', 'name', 'video', 'Presentation', 'Assignment', 'Refernce', 'topics', 'order', 'quiz')
+        fields = ('id', 'url', 'part_of', 'name', 'video', 'Presentation', 'Assignment', 'Refernce', 'topics', 'order', 'quiz', 'allow_preview')
 
     def create(self, validated_data):
         quiz_data = validated_data.pop('quiz')
@@ -129,6 +129,7 @@ class Course_ModuleSerializer(serializers.HyperlinkedModelSerializer):
         instance.Refernce = validated_data.get('Refernce', instance.Refernce)
         instance.topics = validated_data.get('topics', instance.topics)
         instance.order = validated_data.get('order', instance.order)
+        instance.allow_preview = validated_data.get('allow_preview', instance.allow_preview)
         try:
             quiz_data = validated_data.get('quiz')
         except:

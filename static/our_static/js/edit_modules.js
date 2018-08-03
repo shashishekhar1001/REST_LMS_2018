@@ -78,6 +78,12 @@ app.controller('myCtrl', function($scope, $http, $q) {
 
 	$scope.view_module = function(object, index){
 		$scope.selected = object;
+		console.log("View Module")
+		console.log($scope.selected.allow_preview)
+		console.log(typeof($scope.selected.allow_preview))
+		console.log($scope.selected.allow_preview === false)
+		console.log($scope.selected.allow_preview === true)
+		// if($scope.selected.allow_preview === ""
 		if($scope.selected.topics === "undefined"){
 			$scope.selected.topics = "No Topics Added."
 		};
@@ -174,6 +180,26 @@ app.controller('myCtrl', function($scope, $http, $q) {
 		};
 	};
 
+	// Change Preview Option Part
+	$scope.toggle_preview = function(){
+		console.log($scope.selected.allow_preview);
+		$scope.selected.allow_preview = !($scope.selected.allow_preview);
+		console.log($scope.selected.allow_preview);
+		console.log($scope.form_info.allow_preview);
+		var data = {
+			"allow_preview":$scope.form_info.allow_preview
+		};
+		var url = $scope.selected.url;
+		$http.patch(url, data).then(successCallback, errorCallback);
+		function successCallback(response){
+			swal("Preview Option Changed!", "Preview Status Successfully Changed!", "success");
+		};
+		function errorCallback(error){
+			console.log(error);
+			swal("Oops!", "Something went wrong!", "error");
+		};
+	};
+
 	//Video Upload Part	
 	$scope.vdo_upload = function(){
 		var file_selected = false;		
@@ -233,7 +259,7 @@ app.controller('myCtrl', function($scope, $http, $q) {
 			};
 			function errorCallback(error){
 				if (error.status === -1){
-					swal("Aborted!", "File Uploaded Was Aborted!", "error");									
+					swal("Aborted!", "File Uploading Was Aborted!", "error");									
 				}
 				else{
 					swal("Oops!", "Something went wrong....!", "error");									
@@ -302,7 +328,7 @@ app.controller('myCtrl', function($scope, $http, $q) {
 			};
 			function errorCallback(error){
 				if (error.status === -1){
-					swal("Aborted!", "File Uploaded Was Aborted!", "error");									
+					swal("Aborted!", "File Uploading Was Aborted!", "error");									
 				}
 				else{
 					swal("Oops!", "Something went wrong....!", "error");									
