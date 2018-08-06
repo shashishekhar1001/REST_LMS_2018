@@ -1,2 +1,3 @@
 static/media_root/
 static/static_root/
+*.pyc

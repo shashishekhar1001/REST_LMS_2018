@@ -298,21 +298,51 @@
         </div>
     </div>
     {% else %}
-        <div class="container">
-            <div style="text-align:center;">
-                <h1>Course Modules</h1>
-            </div>
-            {% for module in modules  %}
-                <div class="row">
-                    <div class="col-sm-1">
-                        <h3> {{ forloop.counter }} </h3>
-                    </div>
-                    <div class="col-sm-6">
-                        <h3> {{ module }} </h3>
-                    </div>
-                </div>
-            {% endfor %}
+    <div class="container">
+        <div style="text-align:center;">
+            <h1>Course Modules</h1>
         </div>
+        {% for module in modules %}
+            <div class="row">
+                <div class="col-sm-1">
+                    <h3> {{ forloop.counter }} </h3>
+                </div>
+                <div class="col-sm-5">
+                    <h3> {{ module }} </h3>
+                </div>
+                {% if module.allow_preview == True %}
+                    <div class="col-sm-1">
+                        {% if module.video %}
+                        <a class="btn btn-primary" href="{{ module.video.url }}">
+                            Video
+                        </a>
+                        {% endif %}
+                    </div>
+                    <div class="col-sm-1">
+                        {% if module.Presentation %}
+                        <a class="btn btn-primary" href="{{ module.Presentation.url }}">
+                            Presentation
+                        </a>
+                        {% endif %}
+                    </div>
+                    <div class="col-sm-1">
+                        {% if module.Assignment %}
+                        <a class="btn btn-primary" href="{{ module.Assignment.url }}">
+                            Assignment
+                        </a>
+                        {% endif %}
+                    </div>
+                    <div class="col-sm-1">
+                        {% if module.Refernce %}
+                        <a class="btn btn-primary" href="{{ module.Refernce.url }}">
+                            Refernce
+                        </a>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
     {% endif %} 
     
     <script src="{% static 'js/browse_course_details.js' %}"></script>

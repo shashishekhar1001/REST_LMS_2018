@@ -336,7 +336,7 @@ def browse_course_details(request, course_id=None):
                 learner = True
                 print("A Learner")
         except:
-            pass
+            return render(request, "preview_course_details.html", context)            
     course = get_object_or_404(Course, id=course_id)
     modules = course.modules.all().order_by('order')
     if learner == True:
@@ -354,6 +354,7 @@ def browse_course_details(request, course_id=None):
             else:
                 print("Not a Subscriber")
                 allow_access = False
+                context = {"course": course}
         else:
             allow_access = False
     else:
