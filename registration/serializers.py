@@ -27,7 +27,7 @@ class Trainer_ModelSerializer(serializers.HyperlinkedModelSerializer):
 class Learner_ModelSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Learner_Model
-        fields = ('url', 'user', 'profile_picture', 'courses_learning')
+        fields = ('url', 'user', 'profile_picture', 'courses_subscribed')
 
 
 class TopicSerializer(serializers.HyperlinkedModelSerializer):

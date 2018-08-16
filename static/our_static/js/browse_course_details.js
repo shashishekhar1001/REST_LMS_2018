@@ -24,11 +24,10 @@ app.controller('myCtrl', function($scope, $http, $q) {
 	function successCallback(response){
 		$scope.course = response.data;
 		$scope.modules = $scope.course.modules;
-		console.log($scope.modules);
 		$scope.get_qna_if_exists();
 	};
 	function errorCallback(error){
-		alert("Error Loading Page!");
+		swal("Oops!", "Error Loading Page!", "error");
 	};
 
 	$scope.all_modules_quiz = {};
@@ -36,15 +35,19 @@ app.controller('myCtrl', function($scope, $http, $q) {
 
 	$scope.get_qna_if_exists = function(){
 		var req_array = [];
+		console.log("Get QnA if exists!")
 		for(var i = 0; i < $scope.modules.length; i++){
 			if($scope.modules[i].quiz.length !== 0){
 				var url = "/api/learner_qa/" + $scope.modules[i].quiz[0].id;
 				req_array.push($http.get(url));
 			};	
 		};
+		console.log("Req Array");
+		console.log(req_array);
 		$q.all(req_array).then(function(response) {
 			$scope.learner_attempted_quizes = response;
-			console.log(response)
+			console.log("Learner Attempted Quizes:-");
+			console.log(response);
 			$scope.map_attempted_quizes();
 	    }).catch(function(error){
 		    console.log(error);
@@ -59,7 +62,7 @@ app.controller('myCtrl', function($scope, $http, $q) {
 				$scope.laq.push($scope.learner_attempted_quizes[i].data);
 			};
 		};
-		// console.log($scope.laq);
+		console.log($scope.laq);
 
 		for(var i = 0; i < $scope.modules.length; i++){
 			for(var j = 0; j < $scope.laq.length; j++){
