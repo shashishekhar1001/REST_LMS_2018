@@ -35,7 +35,7 @@ app.controller('myCtrl', function($scope, $http, $q) {
 
 	$scope.get_qna_if_exists = function(){
 		var req_array = [];
-		console.log("Get QnA if exists!")
+		console.log("Get QnA if exists!");
 		for(var i = 0; i < $scope.modules.length; i++){
 			if($scope.modules[i].quiz.length !== 0){
 				var url = "/api/learner_qa/" + $scope.modules[i].quiz[0].id;

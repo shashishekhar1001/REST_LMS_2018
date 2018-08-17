@@ -1,0 +1,79 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Promocode Listing</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+    <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"> -->
+</head>
+<body>
+    {% if request.user.is_superuser %}
+        <div class="container" style="text-align: center;">
+            <h1>Promocode Listing</h1>
+            <br>
+            <br>
+            <br>
+            {% for message in messages %} 
+                {% if message.tags == 'success' %}
+                    <div class="alert alert-success" style="width: 100%;">
+                        {{ message }}
+                    </div>
+                {% else %}
+                    <div class="alert alert-danger" style="width: 100%;">
+                        {{ message }}
+                    </div>
+                {% endif %} 
+            {% endfor %}
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th style="text-align: center;">Promo Code</th>
+                        <th style="text-align: center;">Course</th>
+                        <th style="text-align: center;">Active</th>
+                        <th style="text-align: center;">Update</th>
+                        <th style="text-align: center;">Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for promo in promo_list %} 
+                        <tr>
+                            <td>{{ promo.code }}</td>
+                            <td>{{ promo.course }}</td>
+                            {% if promo.active %}
+                                <td><i class="fas fa-check"></i></td>
+                            {% else %}
+                                <td><i class="fas fa-times"></i></td>
+                            {% endif %}
+                            <td><a href="{% url 'update_promocode' promo.id %}"><i class="fas fa-sync-alt"></i></td>
+                            <td><a href="{% url 'delete_promocode' promo.id %}"><i class="fas fa-trash-alt"></i></a></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <br>
+            <br>
+            <br>
+            <a href="{% url 'create_promocode' %}">
+                <button class="btn btn-info">
+                    Create New Promo Code
+                </button>
+            </a>
+        </div>
+    {% else %}
+        <br>
+        <br>
+        <br>
+        <div class="container">
+            <div class="alert alert-danger">
+                <strong>Error!</strong> Please login as admin to view the page!.
+            </div>
+        </div>
+    {% endif %}
+</body>
+</html>

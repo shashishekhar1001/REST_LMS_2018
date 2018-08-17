@@ -9,7 +9,7 @@ from django.conf import settings
 from django.core import signing
 from django.core.mail import send_mail
 from django.core.exceptions import ValidationError
-from django.core.urlresolvers import reverse
+from django.core.urlresolvers import reverse, reverse_lazy
 from django.shortcuts import get_object_or_404
 from django.contrib import messages 
 from django import forms
@@ -17,6 +17,8 @@ from django.contrib.auth.decorators import login_required
 from django.forms.models import model_to_dict
 import json
 from django.views.decorators.csrf import csrf_exempt
+from django.views.generic import ListView, DetailView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 
 def custom_user_creation(request):
@@ -417,3 +419,61 @@ def give_course_access(request):
             return HttpResponse(e)
     return HttpResponse('Not an autheticated User Error.')
     
+
+def login_as_admin(request):
+    return render(request, "login_as_admin.html", {})
+
+
+class PromoCodeList(ListView):
+    context_object_name = 'promo_list'
+    queryset = PromoCode.objects.all()
+    template_name = 'promo_list.html'
+
+
+class PromoCodeCreate(CreateView):
+    template_name = "promo_create.html"
+    queryset = PromoCode.objects.all()
+    form_class = CreatePromoForm
+    success_url = reverse_lazy('list_promocode')
+
+    def form_valid(self, form):
+        messages.success(self.request, 'Promo Code Created Successfully!')
+        print(form.cleaned_data)
+        return super().form_valid(form)
+
+
+class PromoCodeDetail(DetailView):
+    context_object_name = "promo"
+    template_name = "promo_detail.html"
+
+    def get_object(self):
+        id_ = self.kwargs.get('id')
+        return get_object_or_404(PromoCode, id=id_)
+
+
+class PromoCodeUpdate(UpdateView):
+    template_name = "promo_create.html"
+    form_class = CreatePromoForm
+    success_url = reverse_lazy('list_promocode')
+
+    def form_valid(self, form):
+        messages.success(self.request, 'Promo Code Updated Successfully!')
+        print(form.cleaned_data)
+        return super().form_valid(form)
+
+    def get_object(self):
+        id_ = self.kwargs.get('id')
+        return get_object_or_404(PromoCode, id=id_)
+
+
+class PromoCodeDelete(DeleteView):
+    model = PromoCode
+    success_url = reverse_lazy('list_promocode')
+
+    def get_object(self):
+        id_ = self.kwargs.get('id')
+        return get_object_or_404(PromoCode, id=id_)
+
+    def get(self, request, *args, **kwargs):
+        messages.error(request, 'Promo Code Deleted Successfully!')
+        return self.post(request, *args, **kwargs)

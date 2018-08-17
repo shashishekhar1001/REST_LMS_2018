@@ -1,0 +1,48 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Promocode Listing</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+    {% if request.user.is_superuser %}
+        <div class="container" style="text-align: center;">
+            <h1>Promocode Details</h1>
+            <br>
+            <br>
+            <br>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th style="text-align: center;">Promo Code</th>
+                        <th style="text-align: center;">Course</th>
+                        <th style="text-align: center;">Active</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{ promo.code }}</td>
+                        <td>{{ promo.course }}</td>
+                        <td>{{ promo.active }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <br>
+        <br>
+        <br>
+        <div class="container">
+            <div class="alert alert-danger">
+                <strong>Error!</strong> Please login as admin to view the page!.
+            </div>
+        </div>
+    {% endif %}
+</body>
+</html>

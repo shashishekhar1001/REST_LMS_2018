@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
+# from django.urls import reverse  #for django 2.0 use this instead of above line
 import os
 from django.conf import settings
 from djangotoolbox.fields import ListField
@@ -189,3 +190,15 @@ class Subscription(models.Model):
     course = models.ForeignKey(Course)
     start_date = models.DateTimeField(auto_now_add = True, auto_now = False)
     end_date = models.DateTimeField()
+
+
+class PromoCode(models.Model):
+    code = models.CharField(max_length=10, unique=True)
+    course = models.ForeignKey(Course)
+    active = models.NullBooleanField(blank=True, null=True, default=False)
+
+    def get_absolute_url(self):
+        return reverse('detail_promocode', kwargs={'id': self.id})
+
+    def __str__(self):
+        return self.code

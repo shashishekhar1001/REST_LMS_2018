@@ -1,3 +1,5 @@
 static/media_root/
 static/static_root/
 *.pyc
+registration/migrations/
+db.sqlite3

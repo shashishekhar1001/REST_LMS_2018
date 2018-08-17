@@ -1,0 +1,51 @@
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Promocode Create/Update</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+</head>
+<body>
+    {% if request.user.is_superuser %}
+        <div class="container" style="text-align: center;">
+            <h1>Create / Update Promocode</h1>
+            <br>
+            <br>
+            <br>
+            {% for message in messages %} 
+                <div class="alert alert-success" style="width: 100%;">
+                    {{ message }}
+                </div> 
+            {% endfor %}
+            <form action="" method="POST">{% csrf_token %}
+                {{ form|crispy }}
+                <input type="submit" value="Add / Update" class="btn btn-success" style="width: 100%;">
+            </form>
+            <br>
+            <br>
+            <br>
+            <a href="{% url 'list_promocode' %}">
+                <button class="btn btn-info">
+                    Promo Listings <i class="fas fa-arrow-circle-left"></i>
+                </button>
+            </a>
+        </div>
+    {% else %}
+        <br>
+        <br>
+        <br>
+        <div class="container">
+            <div class="alert alert-danger">
+                <strong>Error!</strong> Please login as admin to view the page!.
+            </div>
+        </div>
+    {% endif %}
+</body>
+</html>

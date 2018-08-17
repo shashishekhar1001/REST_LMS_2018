@@ -64,3 +64,9 @@ class Course_ModuleForm(forms.ModelForm):
 
 # Course_ModuleFormSet = forms.inlineformset_factory(Course_Module, form=Course_ModuleForm, extra=1)
 Course_ModuleFormSet = forms.modelformset_factory(Course_Module, form=Course_ModuleForm, extra=1, can_order=True, can_delete=True)
+
+
+class CreatePromoForm(forms.ModelForm):
+    class Meta:
+        model = PromoCode
+        fields = ['code', 'course', 'active']
