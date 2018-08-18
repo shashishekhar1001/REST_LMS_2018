@@ -1,0 +1,52 @@
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Apply Promocode</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <!-- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous"> -->
+</head>
+<body>
+    {% if learner %}
+        <div class="container" style="text-align: center;">
+            <h1>Apply Promocode</h1>
+            <br>
+            <br>
+            <br>
+            {% for message in messages %} 
+                {% if message.tags == 'success' %}
+                    <div class="alert alert-success" style="width: 100%;">
+                        {{ message }}
+                    </div>
+                {% else %}
+                    <div class="alert alert-danger" style="width: 100%;">
+                        {{ message }}
+                    </div>
+                {% endif %} 
+            {% endfor %}
+            <form action="" method="POST">{% csrf_token %}
+                {{ form|crispy }}
+                <input type="submit" value="Apply" class="btn btn-success" style="width: 100%;">
+            </form>
+            <br>
+            <br>
+            <br>
+        </div>
+    {% else %}
+        <br>
+        <br>
+        <br>
+        <div class="container">
+            <div class="alert alert-danger">
+                <strong>Error!</strong> Please login as Learner to view the page!.
+            </div>
+        </div>
+    {% endif %}
+</body>
+</html>

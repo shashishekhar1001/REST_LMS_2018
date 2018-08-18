@@ -477,3 +477,62 @@ class PromoCodeDelete(DeleteView):
     def get(self, request, *args, **kwargs):
         messages.error(request, 'Promo Code Deleted Successfully!')
         return self.post(request, *args, **kwargs)
+
+
+# @login_required(login_url='/authentication/login/', redirect_field_name='next')
+# def create_promocode(request):
+#     if request.user.is_superuser:
+#         print("Logged In as a Superuser!")
+#         form = CreatePromoForm(request.POST or None)
+#         if form.is_valid():
+#             instance = form.save(commit=False)
+#             instance.save()
+#             form = CreatePromoForm()
+#             messages.success(request, 'Promo Code Created Successfully.')
+#         return render(request, "create_promocode.html", {'form': form})
+#     else:
+#         return HttpResponseRedirect('/authentication/login_as_admin/')
+
+
+@login_required(login_url='/authentication/login/', redirect_field_name='next')
+def apply_promo(request):
+    user = request.user
+    custom_user = get_object_or_404(Custom_User, user=user)
+    if str(custom_user.primary_registration_type) == "Learner":
+        learner = True
+        if request.method == "POST":
+            form = ApplyPromoForm(request.POST)
+            if form.is_valid():
+                instance = form
+                promo_code = instance.cleaned_data.get('promo_code')
+                try:
+                    promo_code = get_object_or_404(PromoCode, code=promo_code)
+                    if(promo_code.active):
+                        course = promo_code.course
+                        student, created = Learner_Model.objects.get_or_create(user=custom_user)
+                        if created == False:
+                            if course in student.courses_subscribed.all():
+                                messages.error(request, 'You are already subscribed to this course!')
+                            else:
+                                student.courses_subscribed.add(course)
+                                messages.success(request, 'You can now access course ' + str(course) + ' !!!')
+                        else:
+                            student.courses_subscribed.add(course)
+                            student.save()
+                            messages.success(request, 'You can now access course ' + str(course) + ' !!!')
+                    else:
+                        messages.error(request, 'Promo Code Inactive!')
+                except:
+                    messages.error(request, 'Promo Code Invalid!')
+        else:
+            form = ApplyPromoForm()
+        context = {'form':form, 'learner':learner}        
+    else:
+        learner = False
+        context = {'learner':learner}        
+    return render(request, "apply_promo.html", context)        
+    
+
+
+def login_as_learner(request):
+    return render(request, "login_as_learner.html", {})

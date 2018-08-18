@@ -24,4 +24,6 @@ urlpatterns = [
     url(r'^detail_promocode/(?P<id>\d+)', PromoCodeDetail.as_view(), name='detail_promocode'),         
     url(r'^delete_promocode/(?P<id>\d+)', PromoCodeDelete.as_view(), name='delete_promocode'),         
     url(r'^login_as_admin/', 'registration.views.login_as_admin', name='login_as_admin'),         
+    url(r'^login_as_learner/', 'registration.views.login_as_learner', name='login_as_learner'),         
+    url(r'^apply_promo/', 'registration.views.apply_promo', name='apply_promo'),         
 ]

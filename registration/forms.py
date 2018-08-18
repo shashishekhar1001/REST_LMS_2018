@@ -70,3 +70,7 @@ class CreatePromoForm(forms.ModelForm):
     class Meta:
         model = PromoCode
         fields = ['code', 'course', 'active']
+
+
+class ApplyPromoForm(forms.Form):
+    promo_code = forms.CharField(max_length=10, required=True, label="Promo Code")
