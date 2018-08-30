@@ -13,10 +13,14 @@ app.controller('myCtrl', function($scope, $http, $q) {
     console.log("Checkout.js Loaded");
     var cart = document.getElementById("cart").innerHTML;
     $scope.cart = JSON.parse(cart);
+    $scope.courses_ids = [];
     for(i = 0; i < $scope.cart.length; i++){
         $scope.cart[i].time = 1;
         $scope.cart[i].cost = 10;
+        $scope.courses_ids.push($scope.cart[i].id);
     }
+    console.log("courses_ids");
+    console.log($scope.courses_ids);
     $scope.total_cost = 0;
     for(i = 0; i < $scope.cart.length; i++){
         $scope.total_cost = $scope.total_cost + $scope.cart[i].cost;        
@@ -26,8 +30,8 @@ app.controller('myCtrl', function($scope, $http, $q) {
     // Start Paypal Section
     paypal.Button.render({
         
-        // env: 'sandbox', // sandbox | production
-        env: 'production', // sandbox | production
+        env: 'sandbox', // sandbox | production
+        // env: 'production', // sandbox | production
 
         // PayPal Client IDs - replace with your own
         // Create a PayPal app: https://developer.paypal.com/developer/applications/create
@@ -35,10 +39,10 @@ app.controller('myCtrl', function($scope, $http, $q) {
             // My Keys
             // sandbox:    'AZDxjDScFpQtjWTOUtWKbyN_bDt4OgqaF4eYXlewfBP4-8aqX3PiV8e1GWU6liB2CUXlkA59kJXE7M6R',
             // TEST APP
-            // sandbox: 'AWLD_ucGZ0ICt-L-CJSUh2L1Hz5xsxfxscngWC-M0AMqfGWd_XO3tmw8y9Ke5gx1a9zZup6YwQ5H3GXC',
+            sandbox: 'AWLD_ucGZ0ICt-L-CJSUh2L1Hz5xsxfxscngWC-M0AMqfGWd_XO3tmw8y9Ke5gx1a9zZup6YwQ5H3GXC',
             // production: 'Afz2dSzSuchdJWgK39Qbli8AeeXbwuvLmdcStXN_cY4oXLhxKCI5vWP2YEkh8oRIXYqP9CYjPl1SdXrn'
             // Surendra Sir's Paypal Merchant Key
-            production: 'Aduo5FUAsdfk3WOP2CpArJ8cMvhND5aT-6x4I0qOMVdJamZFUslsGv1tzScqejS8o9y-73SyG-IkrM9C'
+            // production: 'Aduo5FUAsdfk3WOP2CpArJ8cMvhND5aT-6x4I0qOMVdJamZFUslsGv1tzScqejS8o9y-73SyG-IkrM9C'
         },
 
         // Show the buyer a 'Pay Now' button in the checkout flow
@@ -71,6 +75,7 @@ app.controller('myCtrl', function($scope, $http, $q) {
                 swal("Payment Done Successfully.", {
                     icon: "success",
                 });
+                $scope.access_provide();
             })
             .catch(function(error){
                 console.log(error);
@@ -80,6 +85,25 @@ app.controller('myCtrl', function($scope, $http, $q) {
 
     }, '#paypal-button');
     // End Paypal Section
+
+    $scope.access_provide = function(){
+        console.log("Access PROVISION");
+        $scope.access = JSON.stringify("YES");
+        // POST
+		var url = "/authentication/provide_acess_on_payment/";
+		var data= {
+            "access": $scope.access,
+            "courses_ids": $scope.courses_ids
+		};
+		$http.post(url, data).then(successCallback, errorCallback);			
+		function successCallback(response){
+			console.log(response);
+		};
+		function errorCallback(error){
+			console.log(error);
+			swal("Oops!", "Check your internet connection!", "error");			
+		};
+    };
     
     $scope.provide_access = function(){
         // var basicAuthString = btoa('CLIENTID:SECRET');

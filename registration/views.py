@@ -378,6 +378,37 @@ def update_cart_session(request):
         return HttpResponse("Not a POST Method")
 
 
+def provide_acess_on_payment(request):
+    if request.method == 'POST':
+        posted_data = json.loads(request.body)
+        courses_ids = posted_data["courses_ids"]
+        for id in  courses_ids:
+            print(id)
+        user = request.user
+        custom_user = get_object_or_404(Custom_User, user=user)
+        if str(custom_user.primary_registration_type) == "Learner":
+            student, created = Learner_Model.objects.get_or_create(user=custom_user)
+            if created == False:
+                for id in  courses_ids:
+                    course = Course.objects.get(id=id)
+                    if course in student.courses_subscribed.all():
+                        pass
+                    else:
+                        student.courses_subscribed.add(course)
+            else:
+                for id in  courses_ids:
+                    course = Course.objects.get(id=id)
+                    student.courses_subscribed.add(course)
+            student.save()
+        print("Granted Access Successfully")
+        return HttpResponse('Access Provided 200 All Ok')
+    else:
+        print("POST request not completed.")
+        return HttpResponse("Not a POST Method")
+
+
+
+
 @login_required(login_url='/authentication/login/', redirect_field_name='next')
 def checkout(request):
     if request.user.is_authenticated():
@@ -479,21 +510,6 @@ class PromoCodeDelete(DeleteView):
         return self.post(request, *args, **kwargs)
 
 
-# @login_required(login_url='/authentication/login/', redirect_field_name='next')
-# def create_promocode(request):
-#     if request.user.is_superuser:
-#         print("Logged In as a Superuser!")
-#         form = CreatePromoForm(request.POST or None)
-#         if form.is_valid():
-#             instance = form.save(commit=False)
-#             instance.save()
-#             form = CreatePromoForm()
-#             messages.success(request, 'Promo Code Created Successfully.')
-#         return render(request, "create_promocode.html", {'form': form})
-#     else:
-#         return HttpResponseRedirect('/authentication/login_as_admin/')
-
-
 @login_required(login_url='/authentication/login/', redirect_field_name='next')
 def apply_promo(request):
     user = request.user
@@ -536,3 +552,5 @@ def apply_promo(request):
 
 def login_as_learner(request):
     return render(request, "login_as_learner.html", {})
+
+

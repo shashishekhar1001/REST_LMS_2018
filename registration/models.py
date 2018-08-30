@@ -202,3 +202,13 @@ class PromoCode(models.Model):
 
     def __str__(self):
         return self.code
+
+
+
+class CourseFeeReceipt(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now=True)
+    courses = models.TextField()
+
+    def __str__(self):
+        return self.user
