@@ -9,14 +9,15 @@ app.config(function($httpProvider) {
 	$httpProvider.defaults.headers.common['Accept'] = 'application/json, text/javascript';
 });
 
-app.controller('myCtrl', function($scope, $http, $q) {
+app.controller('myCtrl', function($scope, $http, $q, $window) {
     console.log("Checkout.js Loaded");
     var cart = document.getElementById("cart").innerHTML;
     $scope.cart = JSON.parse(cart);
     $scope.courses_ids = [];
     for(i = 0; i < $scope.cart.length; i++){
         $scope.cart[i].time = 1;
-        $scope.cart[i].cost = 10;
+        // $scope.cart[i].cost = 10;
+        $scope.cart[i].cost = $scope.cart[i].fees;
         $scope.courses_ids.push($scope.cart[i].id);
     }
     console.log("courses_ids");
@@ -39,10 +40,10 @@ app.controller('myCtrl', function($scope, $http, $q) {
             // My Keys
             // sandbox:    'AZDxjDScFpQtjWTOUtWKbyN_bDt4OgqaF4eYXlewfBP4-8aqX3PiV8e1GWU6liB2CUXlkA59kJXE7M6R',
             // TEST APP
-            sandbox: 'AWLD_ucGZ0ICt-L-CJSUh2L1Hz5xsxfxscngWC-M0AMqfGWd_XO3tmw8y9Ke5gx1a9zZup6YwQ5H3GXC',
+            // sandbox: 'AWLD_ucGZ0ICt-L-CJSUh2L1Hz5xsxfxscngWC-M0AMqfGWd_XO3tmw8y9Ke5gx1a9zZup6YwQ5H3GXC',
             // production: 'Afz2dSzSuchdJWgK39Qbli8AeeXbwuvLmdcStXN_cY4oXLhxKCI5vWP2YEkh8oRIXYqP9CYjPl1SdXrn'
             // Surendra Sir's Paypal Merchant Key
-            // production: 'Aduo5FUAsdfk3WOP2CpArJ8cMvhND5aT-6x4I0qOMVdJamZFUslsGv1tzScqejS8o9y-73SyG-IkrM9C'
+            production: 'Aduo5FUAsdfk3WOP2CpArJ8cMvhND5aT-6x4I0qOMVdJamZFUslsGv1tzScqejS8o9y-73SyG-IkrM9C'
         },
 
         // Show the buyer a 'Pay Now' button in the checkout flow
@@ -97,7 +98,16 @@ app.controller('myCtrl', function($scope, $http, $q) {
 		};
 		$http.post(url, data).then(successCallback, errorCallback);			
 		function successCallback(response){
-			console.log(response);
+            console.log(response);
+            if(response.data === 'Access Provided 200 All Ok')
+            {
+                console.log("Redirect to the receipts section.");
+                console.log($window.location);
+                $window.location.href = '/authentication/my_receipts/';
+            }
+            else{
+                console.log(response.data)
+            }
 		};
 		function errorCallback(error){
 			console.log(error);

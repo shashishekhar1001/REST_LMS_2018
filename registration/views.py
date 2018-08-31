@@ -386,20 +386,34 @@ def provide_acess_on_payment(request):
             print(id)
         user = request.user
         custom_user = get_object_or_404(Custom_User, user=user)
+        refund = 0
+        paid = 0
+        courses_paid_for = ""
+        refund_for = ""
         if str(custom_user.primary_registration_type) == "Learner":
             student, created = Learner_Model.objects.get_or_create(user=custom_user)
             if created == False:
                 for id in  courses_ids:
                     course = Course.objects.get(id=id)
                     if course in student.courses_subscribed.all():
-                        pass
+                        refund = refund + course.fees
+                        paid = paid + course.fees
+                        courses_paid_for = courses_paid_for + str(course) + ", "
+                        refund_for = refund_for + str(course) + ", "
                     else:
+                        paid = paid + course.fees
                         student.courses_subscribed.add(course)
+                        courses_paid_for = courses_paid_for + str(course) + ", "
             else:
                 for id in  courses_ids:
                     course = Course.objects.get(id=id)
+                    paid = paid + course.fees
                     student.courses_subscribed.add(course)
+                    courses_paid_for = courses_paid_for + str(course) + ", "
+            student.credit_balance = student.credit_balance + refund             
             student.save()
+            receipt = CourseFeeReceipt.objects.create(user=request.user, courses_paid_for=courses_paid_for, refund=refund, paid=paid, refund_for=refund_for)
+            receipt.save()
         print("Granted Access Successfully")
         return HttpResponse('Access Provided 200 All Ok')
     else:
@@ -407,6 +421,17 @@ def provide_acess_on_payment(request):
         return HttpResponse("Not a POST Method")
 
 
+@login_required(login_url='/authentication/login/', redirect_field_name='next')
+def my_receipts(request):
+    user = request.user
+    custom_user = get_object_or_404(Custom_User, user=user)
+    if str(custom_user.primary_registration_type) == "Learner":
+        learner = Learner_Model.objects.get(user=custom_user)
+        credit_balance = learner.credit_balance
+        receipts = CourseFeeReceipt.objects.filter(user=user).order_by('-created_at')
+        return render(request, "my_receipts.html", {"receipts":receipts, "credit_balance":credit_balance})
+    else:
+        return reverse('checkout_error')
 
 
 @login_required(login_url='/authentication/login/', redirect_field_name='next')

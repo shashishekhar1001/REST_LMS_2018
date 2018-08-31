@@ -51,6 +51,7 @@ class Course(models.Model):
     rating = models.FloatField(default=0)
     no_of_ratings = models.FloatField(default=0)
     author = models.CharField(max_length=200, blank=True, default=None, null=True)
+    fees = models.PositiveIntegerField(blank=True, default=0, null=True)
 
     def get_absolute_url(self):
         return reverse('edit_course', kwargs={'course_id': self.id})
@@ -173,6 +174,7 @@ class Learner_Model(models.Model):
     profile_picture = models.ImageField(upload_to='profile_pics/%Y/%m/%d/', blank=True, null=True)
     # courses_learning = models.TextField()
     courses_subscribed = models.ManyToManyField(Course, blank=True, null=True)
+    credit_balance = models.PositiveIntegerField(default=0, blank=True, null=True)
 
     def __str__(self):
         return self.user.user.email
@@ -208,7 +210,10 @@ class PromoCode(models.Model):
 class CourseFeeReceipt(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now=True)
-    courses = models.TextField()
+    courses_paid_for = models.TextField()
+    refund = models.PositiveIntegerField(default=0)
+    paid = models.PositiveIntegerField(default=0)
+    refund_for = models.TextField(default="", blank=True, null=True)
 
     def __str__(self):
-        return self.user
+        return self.user.email

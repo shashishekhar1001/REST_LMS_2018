@@ -27,4 +27,5 @@ urlpatterns = [
     url(r'^login_as_learner/', 'registration.views.login_as_learner', name='login_as_learner'),         
     url(r'^apply_promo/', 'registration.views.apply_promo', name='apply_promo'),         
     url(r'^provide_acess_on_payment/', 'registration.views.provide_acess_on_payment', name='provide_acess_on_payment'),         
+    url(r'^my_receipts/', 'registration.views.my_receipts', name='my_receipts'),         
 ]
