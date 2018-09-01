@@ -31,8 +31,8 @@ app.controller('myCtrl', function($scope, $http, $q, $window) {
     // Start Paypal Section
     paypal.Button.render({
         
-        env: 'sandbox', // sandbox | production
-        // env: 'production', // sandbox | production
+        // env: 'sandbox', // sandbox | production
+        env: 'production', // sandbox | production
 
         // PayPal Client IDs - replace with your own
         // Create a PayPal app: https://developer.paypal.com/developer/applications/create
@@ -57,7 +57,7 @@ app.controller('myCtrl', function($scope, $http, $q, $window) {
                 payment: {
                     transactions: [
                         {
-                            amount: { total: $scope.total_cost, currency: 'USD' }
+                            amount: { total: $scope.total_cost, currency: 'INR' }
                         }
                     ]
                 }
